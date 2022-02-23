@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css?family=Roboto');
 * {
     margin: 0;
     padding: 0;
@@ -25,7 +24,7 @@ body {
     height: 100vh;
     max-width: 375px;
     position: relative;
-    font-family: 'roboto', sans-serif;
+    font-family: sans-serif;
     color: var(--text-color);
 }
 

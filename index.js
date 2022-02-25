@@ -1,34 +1,49 @@
-///////////////////carousel//////////
+///////user input .///
+const okbtn = document.querySelector('.ok');
+const inputBox = document.querySelector('.userInput');
+let username = document.getElementById('username');
+const showUserName = document.querySelector('h3 strong');
 
-const carousel = [...document.querySelectorAll('.carousel img')];
-
-let carouselImageIndex = 0;
-
-const changeCarousel = () => {
-    carousel[carouselImageIndex].classList.toggle('active');
-    if (carouselImageIndex >= carousel.length - 1) {
-        carouselImageIndex = 0;
+okbtn.addEventListener('click', () => {
+    if (username.value == "") {
+        document.getElementById("req").innerHTML = "*Username required";
+        username.focus();
+        return false;
     } else {
-        carouselImageIndex++;
+        showUserName.innerHTML = username.value;
+        inputBox.classList.add('hideform');
     }
+    localStorage.setItem("username", username.value);
+})
 
-    carousel[carouselImageIndex].classList.toggle('active');
+window.onscroll = function() { myFunction() };
 
+var navbar = document.getElementById("greet");
+var sticky = navbar.offsetTop - 50;
+
+function myFunction() {
+    if (window.pageYOffset >= sticky) {
+        navbar.classList.add("disappear")
+
+    } else {
+        navbar.classList.remove("disappear");
+    }
 }
-
-setInterval(() => {
-    changeCarousel();
-}, 3000)
-
 /////////////////////////////////////
 ///////////music player toggler//////
 
 const musicPlayerSection = document.querySelector('.music-player-section');
+const p1icon = document.querySelector('.p1icon');
+const p2icon = document.querySelector('.p2icon');
 let clickCount = 1;
 
 musicPlayerSection.addEventListener('click', () => {
     if (clickCount >= 2) {
         musicPlayerSection.classList.add('active');
+        p1icon.classList.remove('fa-play');
+        p1icon.classList.add('fa-play-circle');
+        p2icon.classList.remove('fa-pause');
+        p2icon.classList.add('fa-pause-circle');
         clickCount = 1;
         console.log(clickCount)
         return;
@@ -44,6 +59,10 @@ musicPlayerSection.addEventListener('click', () => {
 const bakcToHomeBtn = document.querySelector('.music-player-section .back-btn');
 bakcToHomeBtn.addEventListener('click', () => {
     musicPlayerSection.classList.remove('active');
+    p1icon.classList.add('fa-play');
+    p1icon.classList.remove('fa-play-circle');
+    p2icon.classList.add('fa-pause');
+    p2icon.classList.remove('fa-pause-circle');
 })
 
 ///// accessing the playing list////
@@ -74,8 +93,8 @@ const musicDuration = document.querySelector('.duration');
 const queue = [...document.querySelectorAll('.queue')];
 ///////////////all button varibale//
 
-const forwardBtn = document.querySelector('i.fa-forward');
-const backwardBtn = document.querySelector('i.fa-backward');
+const forwardBtn = document.querySelector('i.fa-step-forward');
+const backwardBtn = document.querySelector('i.fa-step-backward');
 const playBtn = document.querySelector('i.fa-play');
 const pauseBtn = document.querySelector('i.fa-pause');
 const redoBtn = document.querySelector('span.fa-redo');
@@ -145,7 +164,9 @@ setInterval(() => {
             setMusic(currentMusic);
             playBtn.click();
         } else {
-            forwardBtn.click();
+            currentMusic++;
+            setMusic(currentMusic);
+            music.play();
         }
     }
 }, 500);
@@ -161,6 +182,7 @@ forwardBtn.addEventListener('click', () => {
     if (playBtn.className.includes('active')) {
         playBtn.classList.remove('active');
         pauseBtn.classList.add('active');
+        console.log('hey')
     }
     if (currentMusic >= songs.length - 1) {
         currentMusic = 0;

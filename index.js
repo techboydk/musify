@@ -19,14 +19,26 @@ okbtn.addEventListener('click', () => {
 window.onscroll = function() { myFunction() };
 
 var navbar = document.getElementById("greet");
-var sticky = navbar.offsetTop - 50;
+var sticky1 = navbar.offsetTop - 50;
+
+let searchBar = document.querySelector('.search-bar');
+let sticky2 = searchBar.offsetTop - 10;
+let homeSection = document.querySelector('.home-section');
 
 function myFunction() {
-    if (window.pageYOffset >= sticky) {
+    if (window.pageYOffset >= sticky1) {
         navbar.classList.add("disappear")
 
     } else {
         navbar.classList.remove("disappear");
+    }
+    if (window.pageYOffset >= sticky2) {
+        searchBar.classList.add('sticky')
+        homeSection.classList.add('overflow');
+
+    } else {
+        searchBar.classList.remove('sticky')
+        homeSection.classList.remove('overflow');
     }
 }
 /////////////////////////////////////

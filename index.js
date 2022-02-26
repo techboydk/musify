@@ -4,6 +4,15 @@ const inputBox = document.querySelector('.userInput');
 let username = document.getElementById('username');
 const showUserName = document.querySelector('h3 strong');
 
+
+window.addEventListener("DOMContentLoaded", function() {
+    let userName = localStorage.getItem("userName");
+    if (userName) {
+        showUserName.innerHTML = userName;
+        inputBox.classList.add('hideform');
+    }
+})
+
 okbtn.addEventListener('click', () => {
     if (username.value == "") {
         document.getElementById("req").innerHTML = "*Username required";
@@ -13,16 +22,19 @@ okbtn.addEventListener('click', () => {
         showUserName.innerHTML = username.value;
         inputBox.classList.add('hideform');
     }
-    localStorage.setItem("username", username.value);
+    localStorage.setItem("userName", username.value);
 })
+
+
+
 
 window.onscroll = function() { myFunction() };
 
 var navbar = document.getElementById("greet");
-var sticky1 = navbar.offsetTop - 50;
+var sticky1 = navbar.offsetTop - 30;
 
 let searchBar = document.querySelector('.search-bar');
-let sticky2 = searchBar.offsetTop - 10;
+let sticky2 = searchBar.offsetTop - 90;
 let homeSection = document.querySelector('.home-section');
 
 function myFunction() {
@@ -79,14 +91,14 @@ bakcToHomeBtn.addEventListener('click', () => {
 
 ///// accessing the playing list////
 const playlistSection = document.querySelector('.playlist');
-const navBtn = document.querySelector('.nav-btn');
+const navBtn = document.querySelector('.playlist');
 
 navBtn.addEventListener('click', () => {
     playlistSection.classList.add('active');
 });
 
 ///////////back to music player//////////////
-const backToMusicPlayer = document.querySelector('.playlist .back-btn');
+const backToMusicPlayer = document.querySelector('.music-player-section');
 backToMusicPlayer.addEventListener('click', () => {
     playlistSection.classList.remove('active');
 });

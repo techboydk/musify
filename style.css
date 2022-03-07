@@ -147,8 +147,8 @@ body {
 
 .greeting {
     position: absolute;
-    margin: 10px 15px;
-    font-size: 30px;
+    margin: 9px 15px;
+    font-size: 25px;
     letter-spacing: 2px;
     font-weight: 700;
     color: #00bfff;
@@ -156,9 +156,9 @@ body {
 
 .showname {
     position: absolute;
-    font-size: 25px;
-    margin: 49px 0px 5px 15px;
-    letter-spacing: 1.5px;
+    font-size: 20px;
+    margin: 41px 0px 5px 15px;
+    letter-spacing: 2px;
     text-transform: capitalize;
 }
 
@@ -168,8 +168,10 @@ body {
 }
 
 .disappear+.search-bar {
-    transform: translateY(-36px);
-    transition: transform 1s;
+    width: 80%;
+    transition: width .5s;
+    float: right;
+    margin-right: 10px;
 }
 
 
@@ -180,9 +182,10 @@ body {
     height: 55px;
     background: white;
     margin: auto;
-    margin-top: -65px;
+    margin-bottom: 25px;
+    margin-top: -83px;
     border-radius: 10px;
-    box-shadow: 2px 2px 15px -5px grey;
+    box-shadow: 2px 2px 15px -5px #2e2d2d;
     display: flex;
 }
 
@@ -200,18 +203,21 @@ body {
 }
 
 .sticky {
+    border-radius: 10px;
+    box-shadow: 2px 2px 15px -5px grey;
     position: fixed;
-    margin: -168px 10px 0 0;
-    width: 80%;
-    z-index: 1;
+    top: 0;
     right: 0;
+    width: 90%;
+    margin-top: 10px;
+    z-index: 2;
 }
 
 .heading {
-    margin: 30px 15px 10px;
+    margin: 5px 15px 10px;
     text-transform: capitalize;
     font-weight: 700;
-    font-size: 25px;
+    font-size: 20px;
     color: #00bfff;
     letter-spacing: 2px;
 }
@@ -234,25 +240,25 @@ body {
     flex: 0 0 auto;
     max-width: 150px;
     height: 100%;
-    margin-right: 20px;
-    border-radius: 20px;
+    margin-right: 10px;
+    border-radius: 10px;
 }
 
 .playlist-card-img {
     width: 100%;
     height: 150px;
     object-fit: cover;
-    border-radius: 20px;
+    border-radius: 10px;
     box-shadow: 0px 0px 10px gray;
-    margin-top: 10px;
 }
 
 .playlist-card-name {
     width: 100%;
     text-align: justify;
-    font-size: 20px;
+    font-size: 15px;
     text-transform: capitalize;
     padding: 5px;
+    font-weight: 700;
 }
 
 
@@ -333,11 +339,11 @@ body {
 .music-player-section.active .fa-play-circle,
 .music-player-section.active .fa-pause-circle {
     border: none;
-    font-size: 70px;
-    text-shadow: 0 0 10px #858585;
+    font-size: 60px;
+    text-shadow: 0 0 10px #262626;
     border-radius: 50px;
     color: white;
-    background-color: #000;
+    background-color: #000000;
     position: absolute;
     margin: -18px -37px;
 }
@@ -409,13 +415,13 @@ body {
 }
 
 .music-player-section.active .current-song-name {
-    margin: 18px 119px;
-    font-size: 40px;
+    margin: 18px 114px;
+    font-size: 30px;
 }
 
 .music-player-section.active .artist-name {
-    font-size: 25px;
-    margin: 68px 0px -17px 140px;
+    font-size: 20px;
+    margin: 59px 0px -57px 128px;
 }
 
 .music-player-section.active .controls {
@@ -436,7 +442,7 @@ body {
     width: 35vh;
     height: 35vh;
     object-fit: cover;
-    margin: 139px 33px 86px;
+    margin: 119px 35px 95px;
     border-radius: 10px;
     box-shadow: var(--shadow);
 }
@@ -505,12 +511,12 @@ body {
     height: 50%;
     position: fixed;
     border-radius: 20px;
-    bottom: -40%;
+    bottom: -43%;
     margin: 0px 25px;
     padding: 30px 0;
     background: var(--background);
     z-index: 3;
-    transition: 1s;
+    transition: .5s;
     box-shadow: 0 0 20px -5px #646464;
     opacity: 0;
     display: none;
@@ -529,9 +535,9 @@ body {
 .title {
     position: fixed;
     font-weight: 700;
-    font-size: 30px;
+    font-size: 20px;
     text-align: center;
-    margin: -23px 5px 48px 111px;
+    margin: -23px 0px 0px 116px;
     text-transform: capitalize;
 }
 

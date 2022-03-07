@@ -34,7 +34,7 @@ var navbar = document.getElementById("greet");
 var sticky1 = navbar.offsetTop - 30;
 
 let searchBar = document.querySelector('.search-bar');
-let sticky2 = searchBar.offsetTop - 90;
+let sticky2 = searchBar.offsetTop - 10;
 let homeSection = document.querySelector('.home-section');
 
 function myFunction() {

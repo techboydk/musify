@@ -9,12 +9,12 @@ import MiniPlayer from "../components/MiniPlayer";
 import { Context } from "../context/contextApi";
 
 const BottomNav = () => {
-  const {isPlaying} = useContext(Context);
+  const {activeMiniPlayer} = useContext(Context);
   return (
     <Container>
-      {isPlaying && <MiniPlayer/>}
+      {activeMiniPlayer && <MiniPlayer/>}
       <div className="nav_links">
-        <NavLink to="/" className="link">
+        <NavLink to="/home" className="link">
           <HomeIcon />
           <strong>Home</strong>
         </NavLink>

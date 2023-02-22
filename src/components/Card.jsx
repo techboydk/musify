@@ -1,15 +1,23 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
+import { Context } from "../context/contextApi";
 
-const Card = () => {
+const Card = ({itemData}) => {
+  const {setSelectedTrack,setPlaying,setActiveMiniPlayer} = useContext(Context)
+
+  const handleClick = () =>{
+    setPlaying(true)
+    setActiveMiniPlayer(true)
+    setSelectedTrack(itemData)
+  }
   return (
-    <Container>
+    <Container onClick={handleClick}>
       <img
-        src="https://png.pngtree.com/template/20220218/ourmid/pngtree-music-poster-of-bar-singing-competition-image_765703.jpg"
+        src={itemData?.thumbnails?.[0].url}
         alt=""
       />
-      <h4 className="title">Playlists name</h4>
-      <p className="subtitle">10 songs</p>
+      <h4 className="title">{itemData?.title?.split('|')?.[0]}</h4>
+      <p className="subtitle">{itemData?.title?.split('|')?.[1]}</p>
     </Container>
   );
 };
@@ -37,11 +45,17 @@ const Container = styled.div`
     font-size: .86rem;
     font-weight: 800;
     text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: 8.5rem;
 
   }
   .subtitle{
     font-size: 0.85rem;
     color: #bbb;
     font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: 8.5rem;
   }
 `;

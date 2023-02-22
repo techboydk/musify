@@ -3,7 +3,7 @@ import axios from 'axios';
 const options = {
   method: 'GET',
   url: 'https://youtube138.p.rapidapi.com/auto-complete/',
-  params: {q: 'desp', hl: 'en', gl: 'US'},
+  params: { hl: 'en', gl: 'IN'},
   headers: {
     'X-RapidAPI-Key': "3a402a7821msh41ac00e78be3ef9p11ad26jsne18698da37c4",
     'X-RapidAPI-Host': 'youtube138.p.rapidapi.com'

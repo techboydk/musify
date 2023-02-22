@@ -5,11 +5,14 @@ export const Context = createContext();
 
 export const AppContext = (props) => {
     const [loading, setLoading] = useState(false);
-    const [searchResults, setSearchResults] = useState(false);
-    const [selectCategories, setselectCategories] = useState("Music");
+    const [searchResults, setSearchResults] = useState([]);
+    const [selectCategories, setselectCategories] = useState("top hindi songs");
     const [mobileMenu, setMobileMenu] = useState(false);
     const [userName, setUserName] = useState(null);
     const [isPlaying, setPlaying] = useState(false);
+    const [activeMiniPlayer, setActiveMiniPlayer] = useState(false);
+    const [selectedTrack, setSelectedTrack] = useState('');
+    const [searchQuery, setSearchQuery] = useState("");
 
     useEffect(() => {
         fetchSelectedCategoryData(selectCategories);
@@ -37,7 +40,13 @@ export const AppContext = (props) => {
                 userName,
                 setUserName,
                 isPlaying,
-                setPlaying
+                setPlaying,
+                searchQuery,
+                setSearchQuery,
+                selectedTrack,
+                setSelectedTrack,
+                activeMiniPlayer,
+                setActiveMiniPlayer
             }}
         >
             {props.children}

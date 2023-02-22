@@ -1,31 +1,34 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import { Routes, Route } from "react-router-dom";
-import SearchResult from "./components/SearchResult";
+import SearchResults from "./components/searchResults";
 import Player from "./components/Player";
 import Home from "./pages/Home";
 import TopCharts from "./pages/TopCharts";
 import Youtube from "./pages/Youtube";
 import Library from "./pages/Library";
-import BottomNav from "./shared/BottomNav";
+import SearchPage from "./components/SearchPage";
+import Loader from "./shared/Loader";
+import { Context } from "./context/contextApi";
+
 
 const Layout = () => {
+  const {loading} = useContext(Context)
   return (
-    <Container>
+    <React.Fragment>
+      {loading && <Loader/>}
       <Routes>
         <Route path="/" exact element={<Home />} />
-        <Route path="/searchResul/:searchQuery" element={<SearchResult />} />
+        <Route path="/searchResults/:searchQuery" element={<SearchResults />} />
         <Route path="/song/:id" element={<Player />} />
         <Route path="/youtube" element={<Youtube />} />
         <Route path="/topcharts" element={<TopCharts />} />
         <Route path="/library" element={<Library />} />
-        <Route path="/searchResult" element={<SearchResult />} />
+        <Route path="/searchPage" element={<SearchPage />} />
       </Routes>
-      <BottomNav />
-    </Container>
+    </React.Fragment>
   );
 };
 
 export default Layout;
 
-const Container = styled.div``;

@@ -9,8 +9,4 @@
     font-family: Montserrat, sans-serif ;
     letter-spacing: 0.035rem;
 }
-body{
-    display: flex;
-    justify-content: center;
-    width: 100vw;
-}
+

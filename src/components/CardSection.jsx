@@ -2,16 +2,14 @@ import React from 'react'
 import styled from 'styled-components';
 import Card from './Card';
 
-const CardSection = () => {
+const CardSection = ({title, data}) => {
   return (
     <Container>
-        <h4 className="title">your playlists</h4>
+        <h4 className="title">{data ? title : "No title"}</h4>
         <div className="cards">
-            <Card/>
-            <Card/>
-            <Card/>
-            <Card/>
-            
+            {data?.map(({video},index)=>{
+                return <Card itemData={video} key={index}/>
+            })}
         </div>
     </Container>
   )

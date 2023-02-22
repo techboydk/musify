@@ -5,28 +5,16 @@ import Searchbar from "../components/Searchbar";
 import SideMenu from "../components/SideMenu";
 import { Context } from "../context/contextApi";
 import SearchIcon from '@mui/icons-material/Search';
+import BottomNav from "../shared/BottomNav";
+
 
 
 const Home = () => {
-  const ref = useRef();
-  useEffect(() => {
-    const handleScroll = () => {
-      if (100 > window.scrollY) {
-        let scrollTop = window.scrollY,
-          minWidth = 90,
-          width = Math.max(minWidth, 100 - scrollTop / 5) + "%";
-        ref.current.style.width = width;
-        console.log(width);
-      }
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-  const { userName } = useContext(Context);
+  const { userName, searchResults } = useContext(Context);
+
+
   return (
-    <Container>
+    <Container className="home">
       <SideMenu />
       <div className="header">
         <div className="greet_text">
@@ -36,16 +24,13 @@ const Home = () => {
       </div>
       <div className="body_content">
         <div className="search_box">
-          <Searchbar Ref={ref} Icon ={SearchIcon} />
+          <Searchbar  Icon ={SearchIcon} />
         </div>
         <div className="card_section">
-          <CardSection />
-          <CardSection />
-          <CardSection />
-          <CardSection />
-          <CardSection />
+          <CardSection title="top hindi songs" data={searchResults && searchResults}/>
         </div>
       </div>
+      <BottomNav />
     </Container>
   );
 };

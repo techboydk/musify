@@ -1,21 +1,22 @@
-import React from 'react'
-import styled from 'styled-components';
-import Home from './pages/Home';
-import Login from './pages/Login';
-import { AppContext } from './context/contextApi'
+import React, { useContext } from "react";
+import styled from "styled-components";
+import { Context } from "./context/contextApi";
+import Layout from "./Layout";
+import Login from "./Login";
+
 
 const App = () => {
-  const userName = true
+  const {userName, setUserName} = useContext(Context);
+
+  setUserName(window.localStorage.getItem("username"));
   return (
-    <AppContext>
-      <Container>
-        {
-          userName ? <Home /> : <Login/>
-        }
-      </Container>
-    </AppContext>
-  )
-}
+    <Container>
+      {
+        userName ? <Layout/> : <Login/>
+      }
+    </Container>
+  );
+};
 
 export default App;
 
@@ -25,5 +26,6 @@ const Container = styled.div`
   height: 100vh;
   flex-direction: column;
   background-color: #111;
-  color: #FFF;
-`
+  color: #fff;
+  
+`;

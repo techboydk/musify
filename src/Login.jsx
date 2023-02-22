@@ -1,8 +1,12 @@
 import React, { useState } from 'react'
+import { useContext } from 'react';
 import styled from 'styled-components';
+import { Context } from './context/contextApi';
 
-const Login = ({setUserName}) => {
+const Login = () => {
   const [message, setMessage] = useState('');
+  const {setUserName} = useContext(Context);
+
 
   const handleChange = (event) => {
     setMessage(event.target.value);
@@ -10,7 +14,7 @@ const Login = ({setUserName}) => {
 
   const handleClick = () => {
     setUserName(message)
-    console.log(message)
+    window.localStorage.setItem("username",message);
   };
   return (
     <Container>

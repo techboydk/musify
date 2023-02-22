@@ -9,6 +9,7 @@ export const AppContext = (props) => {
     const [selectCategories, setselectCategories] = useState("Music");
     const [mobileMenu, setMobileMenu] = useState(false);
     const [userName, setUserName] = useState(null);
+    const [isPlaying, setPlaying] = useState(false);
 
     useEffect(() => {
         fetchSelectedCategoryData(selectCategories);
@@ -34,7 +35,9 @@ export const AppContext = (props) => {
                 mobileMenu,
                 setMobileMenu,
                 userName,
-                setUserName
+                setUserName,
+                isPlaying,
+                setPlaying
             }}
         >
             {props.children}

@@ -9,8 +9,8 @@ import ReactPlayer from "react-player/youtube";
 
 const MiniPlayer = () => {
   const { isPlaying,setPlaying, selectedTrack } = useContext(Context);
-
-  const id = `https://www.youtube.com/watch?v=${selectedTrack?.videoId}`;
+  console.log(selectedTrack.key)
+  const id = `https://www.youtube.com/watch?v=${selectedTrack?.id}`;
   // console.log(id);
   const handlePlayPause =()=>{
     isPlaying ? setPlaying(false) : setPlaying(true);

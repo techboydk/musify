@@ -7,8 +7,8 @@ const CardSection = ({title, data}) => {
     <Container>
         <h4 className="title">{data ? title : "No title"}</h4>
         <div className="cards">
-            {data?.map(({video},index)=>{
-                return <Card itemData={video} key={index}/>
+            {data?.map((video,index)=>{
+                return (video.type === 'video' && <Card itemData={video} key={index}/>)
             })}
         </div>
     </Container>

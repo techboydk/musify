@@ -9,7 +9,6 @@ import SearchCard from "./SearchCard";
 
 const SearchPage = () => {
   const { searchResults,searchQuery } = useContext(Context);
-  console.log(searchResults)
 
   const handleClick = () => {
     window.history.back();
@@ -23,10 +22,10 @@ const SearchPage = () => {
         <Searchbar Icon={ArrowBackIosNewIcon} back={handleClick} />
       </div>
       {
-        searchQuery && searchResults?.map(({video,type})=>{
+        searchQuery && searchResults?.map((video)=>{
           return (
             <React.Fragment>
-              {type === 'video' && <SearchCard video={video}/>}
+              {video.type === 'video' && <SearchCard video={video}/>}
             </React.Fragment>
           )
         })

@@ -8,7 +8,7 @@ export const AppContext = (props) => {
     const [isOnline, setOnline] = useState(window.navigator.onLine);
     const [searchResults, setSearchResults] = useState([]);
     const [categoriesResults, setCategoriesResults] = useState([]);
-    const [selectCategories, setselectCategories] = useState("Bollywood music");
+    const [selectCategories, setselectCategories] = useState("bollywood hits");
     const [mobileMenu, setMobileMenu] = useState(false);
     const [userName, setUserName] = useState(null);
     const [isPlaying, setPlaying] = useState(false);
@@ -23,28 +23,28 @@ export const AppContext = (props) => {
         setOnline(window.navigator.onLine)
     })
 
-    useEffect(() => {
-        if(window.navigator.onLine){
-            fetchSelectedCategoryData(selectCategories);
-            fetchSearchQueryData(searchQuery);
-        }
-    }, [selectCategories, searchQuery])
+     useEffect(() => {
+         if(window.navigator.onLine){
+             { selectCategories && fetchSelectedCategoryData(selectCategories)};
+             {searchQuery && fetchSearchQueryData(searchQuery);}
+         }
+     }, [selectCategories, searchQuery])
 
-    const fetchSelectedCategoryData = (query) =>{
-        setLoading(true);
-        fetchDataFromApi(`search/?q=${query}`).then(({contents}) => {
-            setCategoriesResults(contents);
-            setLoading(false);
-        });
-    }
+     const fetchSelectedCategoryData = (query) =>{
+         setLoading(true);
+         fetchDataFromApi(query).then((data) => {
+             setCategoriesResults(data);
+             setLoading(false);
+         });
+     }
 
-    const fetchSearchQueryData = (query) =>{
-        setLoading(true)
-        fetchDataFromApi(`search/?q=${query}`).then(({contents}) => {
-            setSearchResults(contents);
-            setLoading(false);
-        });
-    }
+     const fetchSearchQueryData = (query) =>{
+         setLoading(true)
+         fetchDataFromApi(query).then((data) => {
+             setSearchResults(data);
+             setLoading(false);
+         });
+     }
     return (
         <Context.Provider
             value={{

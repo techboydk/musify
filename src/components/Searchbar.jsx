@@ -1,11 +1,12 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import styled from "styled-components";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Context } from "../context/contextApi";
 
 const Searchbar = ({ Ref, Icon, back, search }) => {
   const { searchQuery, setSearchQuery } = useContext(Context);
-  const navigate = useNavigate();
+  const [inputValue, setInputValue] = useState()
+  const navigate = useNavigate()
 
   const clickHandler = (e) => {
 
@@ -17,14 +18,11 @@ const Searchbar = ({ Ref, Icon, back, search }) => {
   };
 
   const searchQueryHandler = (event) => {
-    if (event?.key === "Enter" && searchQuery?.length > 0) {
-      navigate(`/searchResult/${searchQuery}`);
+    if (event?.key === "Enter" && inputValue?.length > 0) {
+      setSearchQuery(inputValue)
       console.log(searchQuery)
     }
   };
-
-  const { pathname } = useLocation();
-  const pageName = pathname?.split("/")?.filter(Boolean)?.[0];
 
   return (
     <Container ref={Ref} onClick={clickHandler}>
@@ -35,10 +33,10 @@ const Searchbar = ({ Ref, Icon, back, search }) => {
         id="search"
         placeholder="Songs, Album, Artists, Podcasts ..."
         onChange={(e) => {
-          setSearchQuery(e.target.value);
+          setInputValue(e.target.value);
         }}
         onKeyUp={searchQueryHandler}
-        value={searchQuery}
+        value={inputValue}
       />
     </Container>
   );

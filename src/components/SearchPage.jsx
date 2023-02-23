@@ -4,8 +4,12 @@ import Searchbar from "./Searchbar";
 import CancelIcon from "@mui/icons-material/Cancel";
 import Tag from "./Tag";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import { Context } from "../context/contextApi";
+import SearchCard from "./SearchCard";
 
 const SearchPage = () => {
+  const { searchResults,searchQuery } = useContext(Context);
+  console.log(searchResults)
 
   const handleClick = () => {
     window.history.back();
@@ -18,19 +22,15 @@ const SearchPage = () => {
       <div className="search_container">
         <Searchbar Icon={ArrowBackIosNewIcon} back={handleClick} />
       </div>
-      <div className="search_history">
-        <Tag title="songs" Icon={CancelIcon} />
-        <Tag title="songs" Icon={CancelIcon} />
-        <Tag title="songs" Icon={CancelIcon} />
-        <Tag title="songs" Icon={CancelIcon} />
-        <Tag title="songs" Icon={CancelIcon} />
-      </div>
-      <div className="suggetion">
-        <h3 className="title">Trending Search</h3>
-        <div className="tags">
-          <Tag title="ram aayenge" />
-        </div>
-      </div>
+      {
+        searchQuery && searchResults?.map(({video,type})=>{
+          return (
+            <React.Fragment>
+              {type === 'video' && <SearchCard video={video}/>}
+            </React.Fragment>
+          )
+        })
+      }
     </Container>
   );
 };
@@ -40,8 +40,11 @@ export default SearchPage;
 const Container = styled.div`
   display: flex;
   flex-direction: column;
+  padding: 0 0 15rem;
   .search_container {
     margin: 1rem;
+    position: sticky;
+    top: 1rem;
   }
   .search_history {
     display: flex;

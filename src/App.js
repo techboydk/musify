@@ -3,17 +3,17 @@ import styled from "styled-components";
 import { Context } from "./context/contextApi";
 import Layout from "./Layout";
 import Login from "./Login";
-
+import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
 
 const App = () => {
-  const {userName, setUserName} = useContext(Context);
+  const {userName, setUserName, isOnline} = useContext(Context);
 
   setUserName(window.localStorage.getItem("username"));
 
   return (
     <Container>
       {
-        userName ? <Layout/> : <Login/>
+        userName ? (isOnline ? <Layout/>: <div className="off_line"><span>&#128549;</span> you are offline</div>) : <Login/>
       }
     </Container>
   );
@@ -32,5 +32,18 @@ const Container = styled.div`
   color: #fff;
   &::-webkit-scrollbar{
     display: none;
+  }
+  .off_line{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    text-transform: capitalize;
+    gap: 1rem;
+    font-weight: bold;
+    
+    span{
+      font-size: 2rem;
+    }
   }
 `;

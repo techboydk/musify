@@ -27,7 +27,6 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   &:first-child{
     margin-left: 1rem;
   }

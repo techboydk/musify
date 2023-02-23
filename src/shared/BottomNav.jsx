@@ -14,7 +14,7 @@ const BottomNav = () => {
     <Container>
       {activeMiniPlayer && <MiniPlayer/>}
       <div className="nav_links">
-        <NavLink to="/home" className="link">
+        <NavLink to="/" className="link">
           <HomeIcon />
           <strong>Home</strong>
         </NavLink>

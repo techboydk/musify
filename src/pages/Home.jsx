@@ -1,16 +1,15 @@
-import React, { useContext, useEffect, useRef } from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import CardSection from "../components/CardSection";
 import Searchbar from "../components/Searchbar";
 import SideMenu from "../components/SideMenu";
 import { Context } from "../context/contextApi";
 import SearchIcon from '@mui/icons-material/Search';
-import BottomNav from "../shared/BottomNav";
 
 
 
 const Home = () => {
-  const { userName, searchResults } = useContext(Context);
+  const { userName, categoriesResults } = useContext(Context);
 
 
   return (
@@ -27,10 +26,9 @@ const Home = () => {
           <Searchbar  Icon ={SearchIcon} />
         </div>
         <div className="card_section">
-          <CardSection title="top hindi songs" data={searchResults && searchResults}/>
+          <CardSection title="top hindi songs" data={categoriesResults && categoriesResults}/>
         </div>
       </div>
-      <BottomNav />
     </Container>
   );
 };

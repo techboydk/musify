@@ -5,8 +5,10 @@ export const Context = createContext();
 
 export const AppContext = (props) => {
     const [loading, setLoading] = useState(false);
+    const [isOnline, setOnline] = useState(window.navigator.onLine);
     const [searchResults, setSearchResults] = useState([]);
-    const [selectCategories, setselectCategories] = useState("top hindi songs");
+    const [categoriesResults, setCategoriesResults] = useState([]);
+    const [selectCategories, setselectCategories] = useState("Bollywood music");
     const [mobileMenu, setMobileMenu] = useState(false);
     const [userName, setUserName] = useState(null);
     const [isPlaying, setPlaying] = useState(false);
@@ -14,14 +16,31 @@ export const AppContext = (props) => {
     const [selectedTrack, setSelectedTrack] = useState('');
     const [searchQuery, setSearchQuery] = useState("");
 
+    window.addEventListener("online",()=>{
+        setOnline(window.navigator.onLine)
+    });
+    window.addEventListener("offline",()=>{
+        setOnline(window.navigator.onLine)
+    })
+
     useEffect(() => {
-        fetchSelectedCategoryData(selectCategories);
-    }, [selectCategories])
+        if(window.navigator.onLine){
+            fetchSelectedCategoryData(selectCategories);
+            fetchSearchQueryData(searchQuery);
+        }
+    }, [selectCategories, searchQuery])
 
     const fetchSelectedCategoryData = (query) =>{
         setLoading(true);
         fetchDataFromApi(`search/?q=${query}`).then(({contents}) => {
-            console.log(contents);
+            setCategoriesResults(contents);
+            setLoading(false);
+        });
+    }
+
+    const fetchSearchQueryData = (query) =>{
+        setLoading(true)
+        fetchDataFromApi(`search/?q=${query}`).then(({contents}) => {
             setSearchResults(contents);
             setLoading(false);
         });
@@ -31,6 +50,7 @@ export const AppContext = (props) => {
             value={{
                 loading,
                 setLoading,
+                isOnline,
                 searchResults,
                 setSearchResults,
                 selectCategories,
@@ -46,7 +66,9 @@ export const AppContext = (props) => {
                 selectedTrack,
                 setSelectedTrack,
                 activeMiniPlayer,
-                setActiveMiniPlayer
+                setActiveMiniPlayer,
+                categoriesResults,
+                setCategoriesResults
             }}
         >
             {props.children}

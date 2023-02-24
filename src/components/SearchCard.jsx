@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import styled from "styled-components";
 import { Context } from "../context/contextApi";
 
-const SearchCard = (video) => {
+const SearchCard = ({video}) => {
   const {setSelectedTrack,setPlaying,setActiveMiniPlayer} = useContext(Context)
 
   const handleClick = () =>{

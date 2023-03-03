@@ -1,14 +1,12 @@
-import React, { useContext } from "react";
+import React from "react";
 import styled from "styled-components";
 import Searchbar from "./Searchbar";
-import CancelIcon from "@mui/icons-material/Cancel";
-import Tag from "./Tag";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
-import { Context } from "../context/contextApi";
+import { useStateProvider } from '../utils/StateProvider';
 import SearchCard from "./SearchCard";
 
 const SearchPage = () => {
-  const { searchResults,searchQuery } = useContext(Context);
+  const [{user}, dispatch] = useStateProvider();
 
   const handleClick = () => {
     window.history.back();
@@ -22,13 +20,7 @@ const SearchPage = () => {
         <Searchbar Icon={ArrowBackIosNewIcon} back={handleClick} />
       </div>
       {
-        searchQuery && searchResults?.map((video)=>{
-          return (
-            <React.Fragment>
-              {video.type === 'video' && <SearchCard video={video}/>}
-            </React.Fragment>
-          )
-        })
+
       }
     </Container>
   );

@@ -1,21 +1,60 @@
-import axios from "axios";
-import React, { useContext, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { Context } from "./context/contextApi";
+import { useStateProvider } from "./utils/StateProvider";
 import Layout from "./Layout";
 import Login from "./Login";
 
-
 const App = () => {
-  const {userName, setUserName, isOnline} = useContext(Context);
+  const [{ user, online, isMobile }, dispatch] = useStateProvider();
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
-  setUserName(window.localStorage.getItem("username"));
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (windowWidth < 768) {
+        dispatch({
+          type:"CHECK_MOBILE",
+          isMobile: true
+        })
+      } else {
+        dispatch({
+          type:"CHECK_MOBILE",
+          isMobile: false
+        })
+      }
+      setWindowWidth(window.innerWidth);
+    };
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [windowWidth]);
+
+  useEffect(() => {
+    const _user = window.localStorage.getItem("username");
+
+    if (_user) {
+      dispatch({
+        type: "SET_USER",
+        user: _user,
+      });
+    }
+  }, [user, dispatch]);
 
   return (
-    <Container>
-      {
-        userName ? (isOnline ? <Layout/>: <div className="off_line"><span>&#128549;</span> you are offline</div>) : <Login/>
-      }
+    <Container className="app">
+      {user ? (
+        online ? (
+          <Layout />
+        ) : (
+          <div className="off_line">
+            <span>&#128549;</span> you are offline
+          </div>
+        )
+      ) : (
+        <Login />
+      )}
     </Container>
   );
 };
@@ -23,18 +62,20 @@ const App = () => {
 export default App;
 
 const Container = styled.div`
+  display: flex;
+  flex-direction: row;
+
   margin: auto;
-  max-width: 768px;
   max-height: 100vh;
   height: 100vh;
   width: 100vw;
   overflow-y: scroll;
   background-color: #111;
   color: #fff;
-  &::-webkit-scrollbar{
+  &::-webkit-scrollbar {
     display: none;
   }
-  .off_line{
+  .off_line {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -42,8 +83,8 @@ const Container = styled.div`
     text-transform: capitalize;
     gap: 1rem;
     font-weight: bold;
-    
-    span{
+
+    span {
       font-size: 2rem;
     }
   }

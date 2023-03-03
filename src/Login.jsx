@@ -1,26 +1,29 @@
 import React, { useState } from 'react'
 import { useContext } from 'react';
 import styled from 'styled-components';
-import { Context } from './context/contextApi';
+import { useStateProvider } from './utils/StateProvider';
 
 const Login = () => {
-  const [message, setMessage] = useState('');
-  const {setUserName} = useContext(Context);
+  const [inputValue, setInputValue] = useState('');
+  const [{user}, dispatch] = useStateProvider();
 
 
   const handleChange = (event) => {
-    setMessage(event.target.value);
+    setInputValue(event.target.value);
   };
 
   const handleClick = () => {
-    setUserName(message)
-    window.localStorage.setItem("username",message);
+    dispatch({
+      type: "SET_USER",
+      user: inputValue,
+    })
+    window.localStorage.setItem("username",inputValue);
   };
   return (
     <Container>
       <div className="login_card">
         <p className="title">Enter a user name.</p>
-        <input  type="text" name="username" id="username" placeholder='username...' value={message} onChange={handleChange}/>
+        <input  type="text" name="username" id="username" placeholder='username...' value={inputValue} onChange={handleChange}/>
         <div className="button" onClick={handleClick}>OK</div>
       </div>
     </Container>

@@ -1,14 +1,12 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
-import { Context } from "../context/contextApi";
+import { useStateProvider } from '../utils/StateProvider';
 
 const SearchCard = ({video}) => {
-  const {setSelectedTrack,setPlaying,setActiveMiniPlayer} = useContext(Context)
+  const [{user}, dispatch] = useStateProvider();
 
   const handleClick = () =>{
-    setPlaying(true)
-    setActiveMiniPlayer(true)
-    setSelectedTrack(video)
+
   }
   return (
     <Container onClick={handleClick}>
@@ -22,6 +20,7 @@ const SearchCard = ({video}) => {
 };
 
 export default SearchCard;
+
 const Container = styled.div`
   display: flex;
   align-items: center;

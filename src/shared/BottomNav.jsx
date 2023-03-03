@@ -1,36 +1,17 @@
-import React, { useContext } from "react";
+import React from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 import HomeIcon from "@mui/icons-material/Home";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import LibraryMusicIcon from "@mui/icons-material/LibraryMusic";
-import MiniPlayer from "../components/MiniPlayer";
-import { Context } from "../context/contextApi";
+import { useStateProvider } from '../utils/StateProvider';
 
 const BottomNav = () => {
-  const {activeMiniPlayer} = useContext(Context);
+  const [{isplaying}, dispatch] = useStateProvider();
+
   return (
     <Container>
-      {activeMiniPlayer && <MiniPlayer/>}
-      <div className="nav_links">
-        <NavLink to="/" className="link">
-          <HomeIcon />
-          <strong>Home</strong>
-        </NavLink>
-        <NavLink to="/topcharts" className="link">
-          <TrendingUpIcon />
-          <strong>Trendings</strong>
-        </NavLink>
-        <NavLink to="/youtube" className="link">
-          <YouTubeIcon />
-          <strong>youtube</strong>
-        </NavLink>
-        <NavLink to="/library" className="link">
-          <LibraryMusicIcon />
-          <strong>library</strong>
-        </NavLink>
-      </div>
     </Container>
   );
 };
@@ -38,6 +19,7 @@ const BottomNav = () => {
 export default BottomNav;
 
 const Container = styled.div`
+  max-width: 768px;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;

@@ -1,32 +1,30 @@
-import React, { useContext } from "react";
+import React from "react";
 import styled from "styled-components";
 import CardSection from "../components/CardSection";
 import Searchbar from "../components/Searchbar";
-import SideMenu from "../components/SideMenu";
-import { Context } from "../context/contextApi";
-import SearchIcon from '@mui/icons-material/Search';
-
-
+import { useStateProvider } from "../utils/StateProvider";
+import SearchIcon from "@mui/icons-material/Search";
+import MenuBtn from "../components/MenuBtn";
+import youtube from "../utils/api";
 
 const Home = () => {
-  const { userName, categoriesResults } = useContext(Context);
-
+  const [{ user, isMobile }, dispatch] = useStateProvider();
 
   return (
-    <Container className="home">
-      <SideMenu />
-      <div className="header">
+    <Container className={isMobile && "mobile"}>
+      <div className="menu_btn">{isMobile && <MenuBtn />}</div>
+      <div className={isMobile ? "header mobile" : "header"}>
         <div className="greet_text">
           <h2>hello there!</h2>
-          <h3>{userName}</h3>
+          <h3>{user}</h3>
         </div>
       </div>
       <div className="body_content">
         <div className="search_box">
-          <Searchbar  Icon ={SearchIcon} />
+          <Searchbar Icon={SearchIcon} />
         </div>
         <div className="card_section">
-          <CardSection title="top hindi songs" data={categoriesResults && categoriesResults}/>
+          <CardSection title="trending" data={youtube}/>
         </div>
       </div>
     </Container>
@@ -38,11 +36,23 @@ export default Home;
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-
+  flex: 0.7;
+  &.mobile{
+    flex: 1;
+  }
+  .menu_btn {
+    position: sticky;
+    top: 1.7rem;
+    margin-left: 1rem;
+    z-index: 9;
+  }
   .header {
     position: sticky;
-    top: 2.5rem;
-    margin-top: 3.5rem;
+    top: 1.5rem;
+    margin-bottom: 1.5rem;
+    &.mobile {
+      margin: 2rem 0 0rem;
+    }
     .greet_text {
       margin-left: 1rem;
       text-transform: capitalize;
@@ -59,7 +69,8 @@ const Container = styled.div`
     gap: 1.5rem;
     z-index: 0;
     background-color: #111;
-    .search_box{
+    height: 100%;
+    .search_box {
       padding: 1rem;
       position: sticky;
       top: 0;

@@ -25,6 +25,7 @@ const animation = keyframes`
 const Container = styled.div`
   display: flex;
   width: 100%;
+  max-width: 768px;
   position: fixed;
   top: 0;
   height: 5px;

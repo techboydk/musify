@@ -1,26 +1,24 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
-import { Context } from "../context/contextApi";
+import { useStateProvider } from '../utils/StateProvider';
 
 const Searchbar = ({ Ref, Icon, back, search }) => {
-  const { searchQuery, setSearchQuery } = useContext(Context);
+  const [{user}, dispatch] = useStateProvider();
   const [inputValue, setInputValue] = useState()
-  const navigate = useNavigate()
+
 
   const clickHandler = (e) => {
 
     e.preventDefault();
 
     if (document.location.pathname !== "/searchPage") {
-      navigate("/searchPage");
+
     }
   };
 
   const searchQueryHandler = (event) => {
     if (event?.key === "Enter" && inputValue?.length > 0) {
-      setSearchQuery(inputValue)
-      console.log(searchQuery)
+
     }
   };
 

@@ -1,14 +1,11 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
-import { Context } from "../context/contextApi";
+import { useStateProvider } from '../utils/StateProvider';
 
 const Card = ({itemData}) => {
-  const {setSelectedTrack,setPlaying,setActiveMiniPlayer} = useContext(Context)
+  const [{isplaying}, dispatch] = useStateProvider();
 
   const handleClick = () =>{
-    setPlaying(true)
-    setActiveMiniPlayer(true)
-    setSelectedTrack(itemData)
   }
   return (
     <Container onClick={handleClick}>

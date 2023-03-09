@@ -3,33 +3,51 @@ import styled from "styled-components";
 import { useStateProvider } from "./utils/StateProvider";
 import Layout from "./Layout";
 import Login from "./Login";
+import axios from "axios";
 
 const App = () => {
   const [{ user, online, isMobile }, dispatch] = useStateProvider();
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
+  useEffect(() => {
+
+    const params = {
+      _format: 'json',
+      _marker: 0,
+      api_version: 4,
+      ctx: 'web6dot0',
+      __call: 'webapi.getLaunchData'
+    };
+    
+    axios.get('https://www.jiosaavn.com/api.php', { params })
+      .then(response => {
+        console.log(response.data);
+      })
+      .catch(error => {
+        console.error(error);
+      });
+    
+  }, []);
 
   useEffect(() => {
     const handleResize = () => {
-      if (windowWidth < 768) {
+      if (window.innerWidth < 768) {
         dispatch({
-          type:"CHECK_MOBILE",
-          isMobile: true
-        })
+          type: "CHECK_MOBILE",
+          isMobile: true,
+        });
       } else {
         dispatch({
-          type:"CHECK_MOBILE",
-          isMobile: false
-        })
+          type: "CHECK_MOBILE",
+          isMobile: false,
+        });
       }
-      setWindowWidth(window.innerWidth);
     };
     window.addEventListener("resize", handleResize);
 
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, [windowWidth]);
+  }, [isMobile]);
 
   useEffect(() => {
     const _user = window.localStorage.getItem("username");

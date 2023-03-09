@@ -12,7 +12,7 @@ const MenuBtn = () => {
     });
   };
   return (
-    <div onClick={activeMobileMenu}>
+    <div onClick={activeMobileMenu} style={{cursor:"pointer"}}>
       <MenuOpenIcon />
     </div>
   );

@@ -5,7 +5,6 @@ import Searchbar from "../components/Searchbar";
 import { useStateProvider } from "../utils/StateProvider";
 import SearchIcon from "@mui/icons-material/Search";
 import MenuBtn from "../components/MenuBtn";
-import youtube from "../utils/api";
 
 const Home = () => {
   const [{ user, isMobile }, dispatch] = useStateProvider();
@@ -24,7 +23,7 @@ const Home = () => {
           <Searchbar Icon={SearchIcon} />
         </div>
         <div className="card_section">
-          <CardSection title="trending" data={youtube}/>
+          <CardSection title="trending"/>
         </div>
       </div>
     </Container>

@@ -1,3 +1,4 @@
+
 export const initialState = {
   user: null,
   online: true,
@@ -5,6 +6,7 @@ export const initialState = {
   isplaying: false,
   mobileMenu: false,
   isMobile: window.innerWidth<768 ? true:false,
+  isPlayerFullScreen: false,
 };
 
 const reducer = (state, action) => {
@@ -45,9 +47,18 @@ const reducer = (state, action) => {
         isMobile: action.isMobile,
       };
 
+      case "IS_PLAYER_FULLSCREEN":
+        return {
+          ...state,
+          isPlayerFullScreen: action.isPlayerFullScreen,
+        };
+
+        
     default:
       return state;
   }
 };
 
 export default reducer;
+
+

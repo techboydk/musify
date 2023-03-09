@@ -11,7 +11,7 @@ const Sidebar = () => {
       type: "SET_MOBILE_MENU",
       mobileMenu: false,
     });
-    console.log('mobileMenu')
+    console.log("mobileMenu");
   };
 
   return (
@@ -49,7 +49,7 @@ const Sidebar = () => {
             })}
           </div>
         </div>
-        <div className="bottom">mad by dipesh yadav</div>
+        <div className="bottom">made by dipesh yadav</div>
       </div>
     </Container>
   );
@@ -63,6 +63,7 @@ const Container = styled.div`
   height: 100%;
   position: sticky;
   top: 0;
+  z-index: 99;
   &.mobile {
     margin: 1rem;
     z-index: 9999;
@@ -141,8 +142,13 @@ const Container = styled.div`
           padding: 0.5rem;
           color: #ccc;
           text-transform: capitalize;
+          cursor: pointer;
           &.active {
             color: #00ffc4;
+          }
+          &:hover {
+            background: #3737379e;
+            border-radius: 0.35rem;
           }
         }
       }

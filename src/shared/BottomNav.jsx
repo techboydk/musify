@@ -1,5 +1,4 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 import HomeIcon from "@mui/icons-material/Home";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
@@ -28,6 +27,7 @@ const Container = styled.div`
   bottom: 0;
   width: 100%;
   z-index: 999;
+  
   .nav_links {
     display: flex;
     align-items: center;

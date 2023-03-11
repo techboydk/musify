@@ -5,10 +5,10 @@ import Searchbar from "../components/Searchbar";
 import { useStateProvider } from "../utils/StateProvider";
 import SearchIcon from "@mui/icons-material/Search";
 import MenuBtn from "../components/MenuBtn";
+import { playlistsKeyWords } from "../utils/constant";
 
 const Home = () => {
-  const [{ user, isMobile }, dispatch] = useStateProvider();
-
+  const [{ user, isMobile }] = useStateProvider();
   return (
     <Container className={isMobile && "mobile"}>
       <div className="menu_btn">{isMobile && <MenuBtn />}</div>
@@ -23,7 +23,11 @@ const Home = () => {
           <Searchbar Icon={SearchIcon} />
         </div>
         <div className="card_section">
-          <CardSection title="trending"/>
+          {
+            playlistsKeyWords.map((item, index)=>{
+              return <CardSection title={item.title} keywords={item.keywords} key={index}/>
+            })
+          }
         </div>
       </div>
     </Container>
@@ -36,7 +40,8 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   flex: 0.7;
-  &.mobile{
+  overflow: hidden; 
+  &.mobile {
     flex: 1;
   }
   .menu_btn {

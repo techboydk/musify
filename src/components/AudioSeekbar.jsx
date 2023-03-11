@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useStateProvider } from "../utils/StateProvider";
 import CloseBtn from "./CloseBtn";
 
-const AudioSeekbar = () => {
+const AudioSeekbar = ({ totalTime, currentTime, setCurrentTime, player }) => {
   const [{ isPlayerFullScreen }] = useStateProvider();
   const [speed, setSpeed] = useState(1.0);
   const [isActive, setActive] = useState(false);
@@ -13,6 +13,23 @@ const AudioSeekbar = () => {
   };
   const showSpeedBox = (e) => {
     isActive ? setActive(false) : setActive(true);
+  };
+
+  const handleSeekChange =(e)=>{
+    console.log(e.target.value)
+    setCurrentTime(e.target.value);
+  }
+
+  const handleSeek = () => {
+    if (player.current) {
+      player.current.seekTo(currentTime);
+    }
+  };
+
+  const formatTime = (seconds) => {
+    const minutes = Math.floor(seconds / 60).toString().padStart(2, '0');
+    const secondsStr = (seconds % 60).toString().padStart(2, '0');
+    return `${minutes}:${secondsStr}`;
   };
 
   return (
@@ -38,10 +55,18 @@ const AudioSeekbar = () => {
           />
         </div>
       </div>
-      <input type="range" name="" id="" className={isPlayerFullScreen ? "_seekbar active" : "_seekbar"}/>
+      <input
+        type="range"
+        max={totalTime/1000-1}
+        min={0}
+        value={Math.floor(currentTime)}
+        className={isPlayerFullScreen ? "_seekbar active" : "_seekbar"}
+        onChange={handleSeekChange}
+        onMouseUp={handleSeek}
+      />
       <div className={isPlayerFullScreen ? "time active" : "time"}>
-        <span>00:00</span>
-        <span>00:00</span>
+        <span className="current_time">{formatTime(currentTime)}</span>
+        <span className="total_time">{formatTime(totalTime/1000)}</span>
       </div>
     </Container>
   );
@@ -58,7 +83,7 @@ const Container = styled.div`
     position: relative;
     display: none;
     justify-content: flex-end;
-    &.active{
+    &.active {
       display: flex;
     }
     .current_speed {
@@ -114,7 +139,7 @@ const Container = styled.div`
     opacity: 0.7;
     transition: opacity 0.2s ease 0s;
     overflow: hidden;
-    &.active{
+    &.active {
       overflow: inherit;
     }
     &::-webkit-slider-thumb {
@@ -132,7 +157,7 @@ const Container = styled.div`
     display: none;
     justify-content: space-between;
     font-size: 0.85rem;
-    &.active{
+    &.active {
       display: flex;
     }
   }

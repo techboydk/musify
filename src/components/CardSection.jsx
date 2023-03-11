@@ -1,19 +1,27 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
+import { useStateProvider } from "../utils/StateProvider";
 import Card from "./Card";
+import { getPlaylistDataFromApi } from "../utils/api";
 
-const CardSection = ({ title, data }) => {
+const CardSection = ({ title, keywords }) => {
+  const [{ searchResults }, dispatch] = useStateProvider();
+
+  useEffect(()=>{
+    getPlaylistDataFromApi(keywords[0]).then(res => {
+      dispatch({
+        type: "SET_SEARCH_RESULTS",
+        searchResults: res,
+      })
+    })
+  },[])
 
   return (
     <Container>
-      <h4 className="title">{data ? title : "No title"}</h4>
-      <div
-        className="scrollable-div"
-      >
-        {data?.map((video, index) => {
-          return (
-            video.type === "video" && <Card itemData={video} key={index} />
-          );
+      <h4 className="title">{searchResults ? title : "No title"}</h4>
+      <div className="scrollable-div">
+        {searchResults?.map((playlist, index) => {
+          return <Card itemData={playlist} key={index}/>;
         })}
       </div>
     </Container>
@@ -43,6 +51,8 @@ const Container = styled.div`
     scroll-padding: 1rem;
     -webkit-overflow-scrolling: touch;
     user-select: none;
+    gap: 0.5rem;
+    width: 100%;
     &::-webkit-scrollbar {
       height: 0.25rem;
     }

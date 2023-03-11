@@ -1,36 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { useStateProvider } from "./utils/StateProvider";
 import Layout from "./Layout";
 import Login from "./Login";
-import axios from "axios";
+
 
 const App = () => {
   const [{ user, online, isMobile }, dispatch] = useStateProvider();
 
   useEffect(() => {
-
-    const params = {
-      _format: 'json',
-      _marker: 0,
-      api_version: 4,
-      ctx: 'web6dot0',
-      __call: 'webapi.getLaunchData'
-    };
-    
-    axios.get('https://www.jiosaavn.com/api.php', { params })
-      .then(response => {
-        console.log(response.data);
-      })
-      .catch(error => {
-        console.error(error);
-      });
-    
-  }, []);
-
-  useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth < 768) {
+      if (window.innerWidth < 1024) {
         dispatch({
           type: "CHECK_MOBILE",
           isMobile: true,
@@ -47,7 +27,7 @@ const App = () => {
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, [isMobile]);
+  }, [isMobile,dispatch]);
 
   useEffect(() => {
     const _user = window.localStorage.getItem("username");

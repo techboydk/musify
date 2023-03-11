@@ -1,5 +1,6 @@
 {
   "name": "musif-original",
+  "homepage": "https://techboydk.github.io/musify",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -11,6 +12,9 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.3.4",
+    "cheerio": "^1.0.0-rc.12",
+    "express": "^4.18.2",
+    "googleapis": "^112.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-player": "^2.11.2",
@@ -26,7 +30,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [

@@ -4,12 +4,15 @@ import { useStateProvider } from "../utils/StateProvider";
 import AudioSeekbar from "../components/AudioSeekbar";
 import { playerControlIcons } from "../utils/constant";
 import CloseBtn from "../components/CloseBtn";
+import ReactPlayer from "react-player";
 
 const Player = () => {
-  const [{ isMobile, isPlayerFullScreen }, dispatch] = useStateProvider();
-  const [isPlaying, setPlaying] = useState(false);
+  const [{ isMobile, isPlayerFullScreen, selectedTrack, isplaying }, dispatch] =
+    useStateProvider();
   const [isShuffle, setShuffle] = useState(false);
   const [isRepeat, setRepeat] = useState("off");
+  const [currentTime, setCurrentTime] = useState(0);
+  const player = useRef(null);
 
   const handlePlayerFullScreen = (e) => {
     e.preventDefault();
@@ -22,6 +25,20 @@ const Player = () => {
       });
     }
   };
+  const handleProgress = ({ playedSeconds }) => {
+    setCurrentTime(Math.floor(playedSeconds));
+  };
+
+  useEffect(()=>{
+    if (selectedTrack?.duration / 1000 - 1 === currentTime && isRepeat === "one") {
+      setCurrentTime(0);
+      dispatch({
+        type: "SET_PLAYING",
+        isplaying: true,
+      });
+    }
+
+  },[currentTime])
 
   const handleCloseBtn = () => {
     dispatch({
@@ -45,7 +62,19 @@ const Player = () => {
   };
 
   const handlePlayPause = () => {
-    setPlaying(!isPlaying);
+    if (isplaying) {
+      dispatch({
+        type: "SET_PLAYING",
+        isplaying: false,
+      });
+    } else {
+      dispatch({
+        type: "SET_PLAYING",
+        isplaying: true,
+      });
+    }
+    console.log();
+    console.log(currentTime);
   };
   return (
     <Container
@@ -60,23 +89,39 @@ const Player = () => {
       }
       onClick={handlePlayerFullScreen}
     >
+      <ReactPlayer
+        url={selectedTrack?.url}
+        playing={isplaying}
+        onProgress={handleProgress}
+        ref={player}
+        width="0"
+        height="0"
+      />
       <div className="close_btn" onClick={handleCloseBtn}>
         <CloseBtn />
       </div>
       <div className="song_details">
         <div className="img">
-          <img
-            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSY0nqPCmJr5IAw-onXBHNqFzrpowv9YZBiwg&usqp=CAU"
-            alt=""
-          />
+          <img src={selectedTrack?.thumbnail?.url} alt="" />
         </div>
         <div className="details">
-          <h4 className="title">song title</h4>
-          <p className="subtitle">subtitle</p>
+          <h4 className="title">
+            {selectedTrack?.title
+              ?.split("-")[0]
+              ?.split(" ")
+              .slice(0, 4)
+              .join(" ")}
+          </h4>
+          <p className="subtitle">{selectedTrack?.channel?.name}</p>
         </div>
       </div>
       <div className="seekbar_duration">
-        <AudioSeekbar />
+        <AudioSeekbar
+          totalTime={selectedTrack?.duration}
+          currentTime={currentTime}
+          player={player}
+          setCurrentTime={setCurrentTime}
+        />
       </div>
       {isPlayerFullScreen ? (
         <div className="player_control_fullscreen">
@@ -93,7 +138,7 @@ const Player = () => {
           </div>
           <div className="middle">
             <playerControlIcons.prev />
-            {isPlaying ? (
+            {isplaying ? (
               <playerControlIcons.pause2
                 onClick={handlePlayPause}
                 style={{ fontSize: "2.5rem" }}
@@ -126,7 +171,7 @@ const Player = () => {
       ) : (
         <div className="player_control">
           <playerControlIcons.prev />
-          {isPlaying ? (
+          {isplaying ? (
             <playerControlIcons.pause onClick={handlePlayPause} />
           ) : (
             <playerControlIcons.play onClick={handlePlayPause} />

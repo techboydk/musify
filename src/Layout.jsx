@@ -8,13 +8,12 @@ import PlayingPlaylist from "./components/PlayingPlaylist";
 import Player from "./shared/Player";
 
 const Layout = () => {
-  const [{ loading, isPlayerFullScreen }, dispatch] = useStateProvider();
+  const [{ loading, isPlayerFullScreen, isPlaylistSelected }, dispatch] = useStateProvider();
   return (
     <React.Fragment>
-      {loading && <Loader />}
       <Sidebar/>
       <Home/>
-      <PlayingPlaylist/>
+      {isPlaylistSelected && <PlayingPlaylist/>}
       <div className={isPlayerFullScreen ? "fullscreen player":"player"}><Player/></div>
     </React.Fragment>
   );

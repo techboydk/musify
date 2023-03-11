@@ -1,23 +1,142 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useStateProvider } from "../utils/StateProvider";
+import TrackCard from "./TrackCard";
+import { getPlaylistItemsFromId } from "../utils/api";
+import CloseBtn from "./CloseBtn";
+import Loader from "../shared/Loader";
 
 const PlayingPlaylist = () => {
-  const [{ isMobile, isplaying }, dispatch] = useStateProvider();
+  const [{ isMobile, selectedPlaylist, selectedPlaylistItems, isPlaylistSelected, loading }, dispatch] =
+    useStateProvider();
 
-  return <Container className={isMobile && "mobile"}>PlayingPlaylist</Container>;
+  useEffect(() => {
+    dispatch({
+      type:"SET_SELECTED_PLAYLIST_ITEMS",
+      selectedPlaylistItems: [],
+    })
+    dispatch({
+      type: "SET_LOADING",
+      loading: true,
+    })
+    getPlaylistItemsFromId(selectedPlaylist?.id).then(async (data) => {
+      dispatch({
+        type: "SET_SELECTED_PLAYLIST_ITEMS",
+        selectedPlaylistItems: data,
+      });
+      dispatch({
+        type: "SET_LOADING",
+        loading: false,
+      })
+    });
+    
+  }, [selectedPlaylist]);
+
+  const handleCloseBtn = () =>{
+    console.log(isPlaylistSelected)
+    dispatch({
+      type: "IS_PLAYLIST_SELECTED",
+      isPlaylistSelected: false,
+    })
+  }
+
+  return (
+    <Container className={isMobile && "mobile"}>
+      <div className="close_btn" onClick={handleCloseBtn}>
+        <CloseBtn />
+      </div>
+      <div className="playlist_details">
+        <div className="img">
+          <img src={selectedPlaylist?.thumbnail?.url} alt="" />
+        </div>
+        <div className="text">
+          <h2 className="title">
+            {selectedPlaylist?.title?.split(" ").slice(0, 2).join(" ")}
+          </h2>
+          <p className="subtitle">{selectedPlaylist?.channel?.name}</p>
+          <div className="buttons">button</div>
+        </div>
+      </div>
+      <div className="playlist_items">
+        {loading && <Loader/>}
+        {selectedPlaylistItems &&
+          selectedPlaylistItems.map((item, index) => {
+            return <TrackCard track={item} key={index} />;
+          })}
+      </div>
+    </Container>
+  );
 };
 
 export default PlayingPlaylist;
-
 const Container = styled.div`
   display: flex;
-  flex: 0.3;
+  flex: 0.3 1 0%;
+  flex-direction: column;
   position: sticky;
   top: 0;
-  &.mobile{
+  padding-bottom: 2rem;
+  .close_btn {
+    display: none;
+    }
+  .playlist_details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 1rem 0.5rem;
+    position: sticky;
+    top: 0;
+    right: 0;
+    .img {
+      overflow: hidden;
+      aspect-ratio: 5/4;
+      border-radius: 0.75rem;
+      width: 15rem;
+    }
+    .text {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      width: 100%;
+      padding: 1rem 0 0.5rem;
+      text-transform: capitalize;
+      white-space: nowrap;
+      overflow: hidden;
+      gap: 0.25rem;
+      .title {
+        max-width: 15rem;
+        font-size: 1.3rem;
+      }
+      .subtitle {
+        font-size: 0.9rem;
+      }
+    }
+  }
+  .playlist_items {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    overflow-y: auto;
+    height: 100%;
+    padding: 1rem 0.5rem 2rem;
+  }
+
+  &.mobile {
     position: fixed;
     top: 0;
     right: 0;
+    background-color: #2b2b2b;
+    width: 100%;
+    z-index: 9;
+    .close_btn {
+      display: flex;
+      position: fixed;
+      top: 1rem;
+      left: 1rem;
+      z-index: 9;
+    }
+    .playlist_items{
+      height: calc(100vh - 385px);
+    }
   }
 `;

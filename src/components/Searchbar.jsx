@@ -1,20 +1,45 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { getSearchDataFromApi } from "../utils/api";
 import { useStateProvider } from '../utils/StateProvider';
 
 const Searchbar = ({ Ref, Icon, back, search }) => {
-  const [{user}, dispatch] = useStateProvider();
+  const [{},dispatch] = useStateProvider();
   const [inputValue, setInputValue] = useState();
   const navigate = useNavigate()
 
 
   const clickHandler = (e) => {
-    navigate("/searchpage")
+    if(window.location.hash.split("/")[1]!=='searchpage'){
+      navigate("/searchpage")
+    }
   };
 
   const searchQueryHandler = (event) => {
     if (event?.key === "Enter" && inputValue?.length > 0) {
+      dispatch({
+        type:"query",
+        query: inputValue,
+      });
+      dispatch({
+        type:"SET_LOADING",
+        loading: true,
+      });
+      getSearchDataFromApi(inputValue).then(data=>{
+        dispatch({
+          type:"SET_SEARCH_RESULTS",
+          searchResults: data,
+        });
+        dispatch({
+          type:"SET_SELECTED_PLAYLIST_ITEMS",
+          selectedPlaylistItems: data,
+        })
+        dispatch({
+          type:"SET_LOADING",
+          loading: false,
+        });
+      });
 
     }
   };

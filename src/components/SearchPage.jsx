@@ -2,26 +2,38 @@ import React from "react";
 import styled from "styled-components";
 import Searchbar from "./Searchbar";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
-import { useStateProvider } from '../utils/StateProvider';
+import { useStateProvider } from "../utils/StateProvider";
 import SearchCard from "./SearchCard";
+import TrackCard from "./TrackCard";
+import Loader from "../shared/Loader";
+import { useNavigate } from "react-router-dom";
 
 const SearchPage = () => {
-  const [{user}, dispatch] = useStateProvider();
+  const [{ searchResults, loading }, dispatch] = useStateProvider();
+  const navigate = useNavigate()
 
-  const handleClick = () => {
-    window.history.back();
+  const handleBackEvent = () => {
+    window.history.back()
+    dispatch({
+      type:'SET_SEARCH_RESULTS',
+      searchResults:[]
+    })
   };
-
-
 
   return (
     <Container>
       <div className="search_container">
-        <Searchbar Icon={ArrowBackIosNewIcon} back={handleClick} />
+        <Searchbar Icon={ArrowBackIosNewIcon} back={handleBackEvent} />
       </div>
-      {
-
-      }
+      {loading ? (
+        <Loader />
+      ) : (
+        <div className="search_items">
+          {searchResults?.map((item) => {
+            return <TrackCard track={item} />;
+          })}
+        </div>
+      )}
     </Container>
   );
 };
@@ -32,10 +44,12 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   padding: 0 0 15rem;
+  width: 100%;
   .search_container {
-    margin: 1rem;
-    position: sticky;
-    top: 1rem;
+    position: fixed;
+    padding: 1rem;
+    width: 100%;
+    z-index: 99;
   }
   .search_history {
     display: flex;
@@ -51,5 +65,13 @@ const Container = styled.div`
     h3 {
       color: #00ffc4;
     }
+  }
+  .search_items {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem 2rem 6rem;
+    gap: 1rem;
+    position: relative;
+    top: 80px;
   }
 `;

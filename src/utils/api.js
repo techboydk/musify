@@ -28,3 +28,12 @@ export const getPlaylistItemsFromId = async (id) => {
   );
   return data?.result?.videos;
 };
+
+export const getSearchDataFromApi = async (query) => {
+  const url = query.split(" ").join("+");
+  const { data } = await axios.request(
+    `${BASE_URL}/search?query=${url}&type=video&videoDuration=short`,
+    options
+  );
+  return data?.results;
+};

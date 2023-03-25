@@ -6,6 +6,7 @@ const TrackCard = ({ track }) => {
   const [{ selectedTrack, selectedTrackIndex, selectedPlaylistItems }, dispatch] = useStateProvider();
 
   const handleClick = () => {
+    console.log(track)
     dispatch({
       type: "SET_SELECTED_TRACK",
       selectedTrack: track,

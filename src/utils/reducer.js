@@ -1,13 +1,14 @@
 export const initialState = {
   user: null,
   online: true,
-  loading: true,
+  loading: false,
   isplaying: false,
   mobileMenu: false,
   isMobile: window.innerWidth < 1024 ? true : false,
   isPlayerFullScreen: false,
-  query: "Music",
+  query: "",
   searchResults: [],
+  allPlaylists: [],
   selectedPlaylist: null,
   isPlaylistSelected: false,
   selectedPlaylistItems: [],
@@ -69,6 +70,12 @@ const reducer = (state, action) => {
       return {
         ...state,
         searchResults: action.searchResults,
+      };
+
+    case "SET_ALL_PLAYLISTS":
+      return {
+        ...state,
+        allPlaylists: action.allPlaylists,
       };
 
     case "SET_Playlist":

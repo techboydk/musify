@@ -5,22 +5,22 @@ import Card from "./Card";
 import { getPlaylistDataFromApi } from "../utils/api";
 
 const CardSection = ({ title, keywords }) => {
-  const [{ searchResults }, dispatch] = useStateProvider();
+  const [{ allPlaylists }, dispatch] = useStateProvider();
 
   useEffect(()=>{
     getPlaylistDataFromApi(keywords[0]).then(res => {
       dispatch({
-        type: "SET_SEARCH_RESULTS",
-        searchResults: res,
+        type: "SET_ALL_PLAYLISTS",
+        allPlaylists: res,
       })
     })
   },[])
 
   return (
     <Container>
-      <h4 className="title">{searchResults ? title : "No title"}</h4>
+      <h4 className="title">{allPlaylists ? title : "No title"}</h4>
       <div className="scrollable-div">
-        {searchResults?.map((playlist, index) => {
+        {allPlaylists?.map((playlist, index) => {
           return <Card itemData={playlist} key={index}/>;
         })}
       </div>

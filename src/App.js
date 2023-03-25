@@ -46,17 +46,22 @@ const App = () => {
   return (
     <Container className="app">
       <Routes>
-        {user ? (
-          online ? (
-            <Route exact path="/" element={<Layout />} />
-          ) : (
-            <div className="off_line">
-              <span>&#128549;</span> you are offline
-            </div>
-          )
-        ) : (
-          <Route exact path="/login" element={<Login />} />
-        )}
+        <Route
+          path="/"
+          element={
+            user ? (
+              online ? (
+                <Layout />
+              ) : (
+                <div className="off_line">
+                  <span>&#128549;</span> you are offline
+                </div>
+              )
+            ) : (
+              <Login />
+            )
+          }
+        />
         <Route path="/searchpage" element={<SearchPage />} />
       </Routes>
       <div className={isPlayerFullScreen ? "fullscreen player" : "player"}>

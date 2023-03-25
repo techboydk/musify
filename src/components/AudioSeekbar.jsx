@@ -141,6 +141,7 @@ const Container = styled.div`
     overflow: hidden;
     &.active {
       overflow: inherit;
+      margin: .25rem 0;
     }
     &::-webkit-slider-thumb {
       -webkit-appearance: none;

@@ -90,6 +90,7 @@ const Container = styled.div`
     justify-content: space-between;
     align-items: center;
     width: 100%;
+    max-width: 250px;
     &.mobile {
       position: fixed;
       left: 0;

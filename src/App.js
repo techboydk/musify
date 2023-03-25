@@ -3,10 +3,13 @@ import styled from "styled-components";
 import { useStateProvider } from "./utils/StateProvider";
 import Layout from "./Layout";
 import Login from "./Login";
-
+import { Route, Routes } from "react-router-dom";
+import SearchPage from "./components/SearchPage";
+import Player from "./shared/Player";
 
 const App = () => {
-  const [{ user, online, isMobile }, dispatch] = useStateProvider();
+  const [{ user, online, isMobile, isPlayerFullScreen }, dispatch] =
+    useStateProvider();
 
   useEffect(() => {
     const handleResize = () => {
@@ -27,7 +30,7 @@ const App = () => {
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, [isMobile,dispatch]);
+  }, [isMobile, dispatch]);
 
   useEffect(() => {
     const _user = window.localStorage.getItem("username");
@@ -42,17 +45,23 @@ const App = () => {
 
   return (
     <Container className="app">
-      {user ? (
-        online ? (
-          <Layout />
+      <Routes>
+        {user ? (
+          online ? (
+            <Route exact path="/" element={<Layout />} />
+          ) : (
+            <div className="off_line">
+              <span>&#128549;</span> you are offline
+            </div>
+          )
         ) : (
-          <div className="off_line">
-            <span>&#128549;</span> you are offline
-          </div>
-        )
-      ) : (
-        <Login />
-      )}
+          <Route exact path="/login" element={<Login />} />
+        )}
+        <Route path="/searchpage" element={<SearchPage />} />
+      </Routes>
+      <div className={isPlayerFullScreen ? "fullscreen player" : "player"}>
+        <Player />
+      </div>
     </Container>
   );
 };

@@ -1,19 +1,16 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useStateProvider } from '../utils/StateProvider';
 
 const Searchbar = ({ Ref, Icon, back, search }) => {
   const [{user}, dispatch] = useStateProvider();
-  const [inputValue, setInputValue] = useState()
+  const [inputValue, setInputValue] = useState();
+  const navigate = useNavigate()
 
 
   const clickHandler = (e) => {
-
-    e.preventDefault();
-
-    if (document.location.pathname !== "/searchPage") {
-
-    }
+    navigate("/searchpage")
   };
 
   const searchQueryHandler = (event) => {

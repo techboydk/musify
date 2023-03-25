@@ -12,6 +12,7 @@ export const initialState = {
   isPlaylistSelected: false,
   selectedPlaylistItems: [],
   selectedTrack: null,
+  selectedTrackIndex: 0,
 };
 
 const reducer = (state, action) => {
@@ -92,6 +93,11 @@ const reducer = (state, action) => {
       return {
         ...state,
         selectedTrack: action.selectedTrack,
+      };
+    case "SET_SELECTED_TRACK_INDEX":
+      return {
+        ...state,
+        selectedTrackIndex: action.selectedTrackIndex,
       };
 
     default:

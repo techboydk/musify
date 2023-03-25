@@ -7,18 +7,26 @@ import CloseBtn from "./CloseBtn";
 import Loader from "../shared/Loader";
 
 const PlayingPlaylist = () => {
-  const [{ isMobile, selectedPlaylist, selectedPlaylistItems, isPlaylistSelected, loading }, dispatch] =
-    useStateProvider();
+  const [
+    {
+      isMobile,
+      selectedPlaylist,
+      selectedPlaylistItems,
+      isPlaylistSelected,
+      loading,
+    },
+    dispatch,
+  ] = useStateProvider();
 
   useEffect(() => {
     dispatch({
-      type:"SET_SELECTED_PLAYLIST_ITEMS",
+      type: "SET_SELECTED_PLAYLIST_ITEMS",
       selectedPlaylistItems: [],
-    })
+    });
     dispatch({
       type: "SET_LOADING",
       loading: true,
-    })
+    });
     getPlaylistItemsFromId(selectedPlaylist?.id).then(async (data) => {
       dispatch({
         type: "SET_SELECTED_PLAYLIST_ITEMS",
@@ -27,18 +35,17 @@ const PlayingPlaylist = () => {
       dispatch({
         type: "SET_LOADING",
         loading: false,
-      })
+      });
     });
-    
   }, [selectedPlaylist]);
 
-  const handleCloseBtn = () =>{
-    console.log(isPlaylistSelected)
+  const handleCloseBtn = () => {
+    console.log(isPlaylistSelected);
     dispatch({
       type: "IS_PLAYLIST_SELECTED",
       isPlaylistSelected: false,
-    })
-  }
+    });
+  };
 
   return (
     <Container className={isMobile && "mobile"}>
@@ -58,7 +65,7 @@ const PlayingPlaylist = () => {
         </div>
       </div>
       <div className="playlist_items">
-        {loading && <Loader/>}
+        {loading && <Loader />}
         {selectedPlaylistItems &&
           selectedPlaylistItems.map((item, index) => {
             return <TrackCard track={item} key={index} />;
@@ -70,35 +77,43 @@ const PlayingPlaylist = () => {
 
 export default PlayingPlaylist;
 const Container = styled.div`
+  position: fixed;
+  top: 0;
+  right: 0;
+  background-color: #2b2b2b;
+  width: 350px;
+  z-index: 10;
   display: flex;
   flex: 0.3 1 0%;
   flex-direction: column;
-  position: sticky;
-  top: 0;
   padding-bottom: 2rem;
   .close_btn {
-    display: none;
-    }
+    display: flex;
+    position: fixed;
+    top: 1rem;
+    right: 300px;
+    z-index: 9;
+  }
   .playlist_details {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 2rem 1rem 0.5rem;
+    -webkit-box-align: center;
+    padding: 4rem 1rem 1.5rem;
     position: sticky;
-    top: 0;
-    right: 0;
+    top: 0px;
+    right: 0px;
+    gap: 1rem;
+    border-bottom: 1px solid rgb(82, 82, 82);
     .img {
       overflow: hidden;
-      aspect-ratio: 5/4;
+      aspect-ratio: 1;
       border-radius: 0.75rem;
-      width: 15rem;
+      max-width: 8rem;
     }
     .text {
       display: flex;
       flex-direction: column;
       align-items: flex-start;
       width: 100%;
-      padding: 1rem 0 0.5rem;
       text-transform: capitalize;
       white-space: nowrap;
       overflow: hidden;
@@ -117,8 +132,11 @@ const Container = styled.div`
     flex-direction: column;
     gap: 0.5rem;
     overflow-y: auto;
-    height: 100%;
+    height: calc(100vh - 280px);
     padding: 1rem 0.5rem 2rem;
+    &::-webkit-scrollbar{
+      display: none;
+    }
   }
 
   &.mobile {
@@ -135,8 +153,8 @@ const Container = styled.div`
       left: 1rem;
       z-index: 9;
     }
-    .playlist_items{
-      height: calc(100vh - 385px);
+    .playlist_items {
+      height: calc(100vh - 280px);
     }
   }
 `;

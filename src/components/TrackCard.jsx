@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useStateProvider } from "../utils/StateProvider";
 
 const TrackCard = ({ track }) => {
-  const [{ selectedTrack }, dispatch] = useStateProvider();
+  const [{ selectedTrack, selectedTrackIndex, selectedPlaylistItems }, dispatch] = useStateProvider();
 
   const handleClick = () => {
     dispatch({
@@ -13,6 +13,10 @@ const TrackCard = ({ track }) => {
     dispatch({
         type: "SET_PLAYING",
         isplaying: true,
+    });
+    dispatch({
+      type:"SET_SELECTED_TRACK_INDEX",
+      selectedTrackIndex: selectedPlaylistItems.indexOf(track),
     });
   };
   return (
@@ -35,6 +39,7 @@ export default TrackCard;
 const Container = styled.div`
   display: flex;
   gap: 1rem;
+  cursor: pointer;
   .img {
     width: 4rem;
     overflow: hidden;

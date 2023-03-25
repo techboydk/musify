@@ -7,8 +7,18 @@ import CloseBtn from "../components/CloseBtn";
 import ReactPlayer from "react-player";
 
 const Player = () => {
-  const [{ isMobile, isPlayerFullScreen, selectedTrack, isplaying }, dispatch] =
-    useStateProvider();
+  const [
+    {
+      isMobile,
+      isPlayerFullScreen,
+      selectedTrack,
+      isplaying,
+      selectedPlaylistItems,
+      selectedTrackIndex,
+    },
+    dispatch,
+  ] = useStateProvider();
+
   const [isShuffle, setShuffle] = useState(false);
   const [isRepeat, setRepeat] = useState("off");
   const [currentTime, setCurrentTime] = useState(0);
@@ -29,16 +39,11 @@ const Player = () => {
     setCurrentTime(Math.floor(playedSeconds));
   };
 
-  useEffect(()=>{
-    if (selectedTrack?.duration / 1000 - 1 === currentTime && isRepeat === "one") {
-      setCurrentTime(0);
-      dispatch({
-        type: "SET_PLAYING",
-        isplaying: true,
-      });
+  useEffect(() => {
+    if (selectedTrack?.duration / 1000 - 1 === currentTime) {
+      nextTrack();
     }
-
-  },[currentTime])
+  }, [currentTime]);
 
   const handleCloseBtn = () => {
     dispatch({
@@ -73,8 +78,48 @@ const Player = () => {
         isplaying: true,
       });
     }
-    console.log();
-    console.log(currentTime);
+  };
+  const prevTrack = () => {
+    if (selectedTrackIndex > 0) {
+      dispatch({
+        type: "SET_SELECTED_TRACK",
+        selectedTrack: selectedPlaylistItems[selectedTrackIndex - 1],
+      });
+      dispatch({
+        type: "SET_SELECTED_TRACK_INDEX",
+        selectedTrackIndex: selectedTrackIndex - 1,
+      });
+    }else{
+      dispatch({
+        type: "SET_SELECTED_TRACK",
+        selectedTrack: selectedPlaylistItems[selectedPlaylistItems?.length - 1],
+      });
+      dispatch({
+        type: "SET_SELECTED_TRACK_INDEX",
+        selectedTrackIndex: selectedPlaylistItems?.length - 1,
+      });
+    }
+  };
+  const nextTrack = () => {
+    if (selectedPlaylistItems?.length-1 > selectedTrackIndex) {
+      dispatch({
+        type: "SET_SELECTED_TRACK",
+        selectedTrack: selectedPlaylistItems[selectedTrackIndex + 1],
+      });
+      dispatch({
+        type: "SET_SELECTED_TRACK_INDEX",
+        selectedTrackIndex: selectedTrackIndex + 1,
+      });
+    }else{
+      dispatch({
+        type: "SET_SELECTED_TRACK",
+        selectedTrack: selectedPlaylistItems[0],
+      });
+      dispatch({
+        type: "SET_SELECTED_TRACK_INDEX",
+        selectedTrackIndex: 0,
+      });
+    }
   };
   return (
     <Container
@@ -96,6 +141,7 @@ const Player = () => {
         ref={player}
         width="0"
         height="0"
+        style={{ display: "none", position: "absolute" }}
       />
       <div className="close_btn" onClick={handleCloseBtn}>
         <CloseBtn />
@@ -137,19 +183,19 @@ const Player = () => {
             <playerControlIcons.like />
           </div>
           <div className="middle">
-            <playerControlIcons.prev />
+            <playerControlIcons.prev onClick={prevTrack} />
             {isplaying ? (
               <playerControlIcons.pause2
                 onClick={handlePlayPause}
-                style={{ fontSize: "2.5rem" }}
+                style={{ fontSize: "3.5rem" }}
               />
             ) : (
               <playerControlIcons.play2
                 onClick={handlePlayPause}
-                style={{ fontSize: "2.5rem" }}
+                style={{ fontSize: "3.5rem" }}
               />
             )}
-            <playerControlIcons.next />
+            <playerControlIcons.next onClick={nextTrack} />
           </div>
           <div className="right">
             {isRepeat === "off" && (
@@ -170,13 +216,13 @@ const Player = () => {
         </div>
       ) : (
         <div className="player_control">
-          <playerControlIcons.prev />
+          <playerControlIcons.prev onClick={prevTrack}/>
           {isplaying ? (
             <playerControlIcons.pause onClick={handlePlayPause} />
           ) : (
             <playerControlIcons.play onClick={handlePlayPause} />
           )}
-          <playerControlIcons.next />
+          <playerControlIcons.next onClick={nextTrack}/>
         </div>
       )}
     </Container>
@@ -192,11 +238,10 @@ const Container = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  padding: 1rem 2rem;
+  padding: 0.5rem 1.5rem;
   background: #333;
   border-radius: 0.5rem;
   color: #fff;
-  flex: 0.5;
   &.mobile {
     flex: 1;
   }
@@ -210,8 +255,8 @@ const Container = styled.div`
     gap: 1rem;
     .img {
       border-radius: 0.25rem;
-      height: 2rem;
-      width: 2rem;
+      height: 3rem;
+      width: 3rem;
       overflow: hidden;
       img {
         height: 100%;
@@ -250,6 +295,7 @@ const Container = styled.div`
     justify-content: space-between;
     width: 100%;
     padding: 0 1rem;
+    margin-top: 1rem;
     align-items: flex-start;
     svg {
       cursor: pointer;

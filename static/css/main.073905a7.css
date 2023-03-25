@@ -1,0 +1,2 @@
+@import url(https://fonts.googleapis.com/css2?family=Lobster&family=Montserrat&display=swap);*{box-sizing:border-box;font-family:Montserrat,sans-serif;letter-spacing:.035rem;margin:0;padding:0;text-decoration:none}.player{bottom:0;display:flex;justify-content:center;left:0;position:fixed;width:100%;z-index:99}.player.fullscreen{top:0;z-index:99}.close_btn,input{cursor:pointer}.img img{height:100%;object-fit:cover;width:100%}
+/*# sourceMappingURL=main.073905a7.css.map*/

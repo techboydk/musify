@@ -5,7 +5,7 @@ import Loader from "./shared/Loader";
 import { useStateProvider } from "./utils/StateProvider";
 import Sidebar from "./components/Sidebar";
 import PlayingPlaylist from "./components/PlayingPlaylist";
-import Player from "./shared/Player";
+
 
 const Layout = () => {
   const [{ loading, isPlayerFullScreen, isPlaylistSelected }, dispatch] = useStateProvider();

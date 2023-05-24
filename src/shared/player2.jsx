@@ -4,7 +4,6 @@ import { useStateProvider } from "../utils/StateProvider";
 import CloseBtn from "../components/CloseBtn";
 import { playerControlIcons } from "../utils/constant";
 import CustomRangeInput from "../components/CustomRangeInput";
-import YouTubePlayer from "../components/Converter";
 import ReactPlayer from "react-player";
 import TrackCard from "../components/TrackCard";
 

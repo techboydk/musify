@@ -14,6 +14,7 @@ export const initialState = {
   selectedPlaylistItems: [],
   selectedTrack: null,
   selectedTrackIndex: 0,
+  likedTrack: JSON.parse(localStorage.getItem('likedTracks')) || [],
 };
 
 const reducer = (state, action) => {
@@ -105,6 +106,11 @@ const reducer = (state, action) => {
       return {
         ...state,
         selectedTrackIndex: action.selectedTrackIndex,
+      };
+    case "SET_LIKED_TRACK":
+      return {
+        ...state,
+        likedTrack: action.likedTrack,
       };
 
     default:

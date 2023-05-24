@@ -37,3 +37,4 @@ export const getSearchDataFromApi = async (query) => {
   );
   return data?.results;
 };
+

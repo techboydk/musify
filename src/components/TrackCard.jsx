@@ -1,22 +1,36 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useStateProvider } from "../utils/StateProvider";
+import { playerControlIcons } from "../utils/constant";
 
 const TrackCard = ({ track }) => {
-  const [{ selectedTrack, selectedTrackIndex, selectedPlaylistItems }, dispatch] = useStateProvider();
+  const [
+    { selectedTrack, selectedTrackIndex, selectedPlaylistItems },
+    dispatch,
+  ] = useStateProvider();
+
+  const [isPlaying, setPlaying] = useState(true);
+
+  useEffect(() => {
+    if (selectedTrack?.id === track?.id) {
+      setPlaying(true);
+      console.log(isPlaying);
+    } else {
+      setPlaying(false);
+    }
+  }, [selectedTrack]);
 
   const handleClick = () => {
-    console.log(track)
     dispatch({
       type: "SET_SELECTED_TRACK",
       selectedTrack: track,
     });
     dispatch({
-        type: "SET_PLAYING",
-        isplaying: true,
+      type: "SET_PLAYING",
+      isplaying: true,
     });
     dispatch({
-      type:"SET_SELECTED_TRACK_INDEX",
+      type: "SET_SELECTED_TRACK_INDEX",
       selectedTrackIndex: selectedPlaylistItems.indexOf(track),
     });
   };
@@ -24,6 +38,11 @@ const TrackCard = ({ track }) => {
     <Container onClick={handleClick}>
       <div className="img">
         <img src={track?.thumbnail?.url} alt={track?.title?.split("|")[0]} />
+        {isPlaying && (
+          <span>
+            <playerControlIcons.playing />
+          </span>
+        )}
       </div>
       <div className="detail">
         <h4 className="track_title">
@@ -47,6 +66,18 @@ const Container = styled.div`
     border-radius: 0.5rem;
     flex-shrink: 0;
     height: 4rem;
+    position: relative;
+    span {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #00000059;
+    }
   }
   .detail {
     display: flex;

@@ -17,6 +17,9 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import RepeatIcon from "@mui/icons-material/Repeat";
 import RepeatOneIcon from "@mui/icons-material/RepeatOne";
 import DownloadIcon from "@mui/icons-material/Download";
+import MusicNoteIcon from '@mui/icons-material/MusicNote';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import GraphicEqIcon from '@mui/icons-material/GraphicEq';
 
 export const icons = [
   { name: "Home", icon: <HomeIcon />, type: "home" },
@@ -36,10 +39,13 @@ export const playerControlIcons = {
   prev: SkipPreviousIcon,
   close: CloseIcon,
   like: FavoriteBorderIcon,
+  liked: FavoriteIcon,
   shuffle: ShuffleIcon,
   repeat: RepeatIcon,
   repeatOne: RepeatOneIcon,
   download: DownloadIcon,
+  musicNote: MusicNoteIcon,
+  playing: GraphicEqIcon,
 };
 
 export const playlistsKeyWords = [

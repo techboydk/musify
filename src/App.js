@@ -6,6 +6,7 @@ import Login from "./Login";
 import { Route, Routes } from "react-router-dom";
 import SearchPage from "./components/SearchPage";
 import Player from "./shared/Player";
+import Player2 from "./shared/player2";
 
 const App = () => {
   const [{ user, online, isMobile, isPlayerFullScreen }, dispatch] =
@@ -65,7 +66,7 @@ const App = () => {
         <Route path="/searchpage" element={<SearchPage />} />
       </Routes>
       <div className={isPlayerFullScreen ? "fullscreen player" : "player"}>
-        <Player />
+        <Player2/>
       </div>
     </Container>
   );

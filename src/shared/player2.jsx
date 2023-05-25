@@ -111,7 +111,7 @@ const Player2 = () => {
   };
 
   useEffect(() => {
-    if(likedTrack.find((t) => t.id === selectedTrack.id)){
+    if(likedTrack?.find((t) => t?.id === selectedTrack?.id)){
       setLiked(true);
     }else{
       setLiked(false)
@@ -127,7 +127,7 @@ const Player2 = () => {
       localStorage.setItem("likedTracks", JSON.stringify(updatedTracks));
       setLiked(true);
     } else {
-      const updatedTracks = likedTrack.filter((t) => t.id !== selectedTrack.id);
+      const updatedTracks = likedTrack?.filter((t) => t?.id !== selectedTrack?.id);
       dispatch({
         type: "SET_LIKED_TRACK",
         likedTrack: updatedTracks,

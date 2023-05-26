@@ -1,19 +1,32 @@
 import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 
-const CustomRangeInput = ({ minValue, maxValue, currentValue, seekTo }) => {
+const CustomRangeInput = ({
+  minValue,
+  maxValue,
+  currentValue,
+  seekTo,
+  loadedTime,
+  selectedTrack,
+}) => {
   const [value, setValue] = useState(minValue);
+  const [loadedValue, setLoadedValue] = useState(minValue);
+
   const sliderRef = useRef(null);
   const isDragging = useRef(false);
 
+  useEffect(() => {
+    handleChange(currentValue);
+  }, [currentValue]);
+
   useEffect(()=>{
-    handleChange(currentValue)
-  },[currentValue])
+    setLoadedValue(loadedTime)
+  },[loadedTime])
 
   useEffect(() => {
     const handleMove = (clientX, rect) => {
       const newValue = calculateNewValue(clientX, rect);
-      seekTo(newValue)
+      seekTo(newValue);
     };
 
     const handleTouchMove = (e) => {
@@ -44,7 +57,6 @@ const CustomRangeInput = ({ minValue, maxValue, currentValue, seekTo }) => {
       document.removeEventListener("touchend", handleEnd);
       document.removeEventListener("mouseup", handleEnd);
     };
-    
   }, [value]);
 
   const handleChange = (newValue) => {
@@ -54,7 +66,9 @@ const CustomRangeInput = ({ minValue, maxValue, currentValue, seekTo }) => {
   const calculateNewValue = (clientX, rect) => {
     const offsetX = clientX - rect.left;
     const percent = (offsetX / rect.width) * 100;
-    const newValue = Math.round((percent / 100) * (maxValue - minValue) + minValue);
+    const newValue = Math.round(
+      (percent / 100) * (maxValue - minValue) + minValue
+    );
     return Math.max(minValue, Math.min(maxValue, newValue));
   };
 
@@ -66,7 +80,7 @@ const CustomRangeInput = ({ minValue, maxValue, currentValue, seekTo }) => {
     if (!isDragging.current) {
       const rect = sliderRef.current.getBoundingClientRect();
       const newValue = calculateNewValue(e.clientX, rect);
-      seekTo(newValue)
+      seekTo(newValue);
     }
   };
 
@@ -83,6 +97,12 @@ const CustomRangeInput = ({ minValue, maxValue, currentValue, seekTo }) => {
           className="slider_progress"
           style={{
             width: `${((value - minValue) / (maxValue - minValue)) * 100 + 1}%`,
+          }}
+        ></div>
+        <div
+          className="slider_progress_buffer"
+          style={{
+            width: `${((loadedValue - minValue) / (maxValue - minValue)) * 100 + 1}%`,
           }}
         ></div>
       </div>
@@ -104,7 +124,7 @@ const Container = styled.div`
   display: flex;
   width: 100%;
   height: 0.25rem;
-  background: #aaa;
+  background: #68686875;
   border-radius: 9999px;
   margin-bottom: 0.5rem;
   position: relative;
@@ -112,24 +132,30 @@ const Container = styled.div`
     .slider_track {
       width: 100%;
       cursor: pointer;
-      .slider_progress {
+      .slider_progress,.slider_progress_buffer {
         position: absolute;
         width: 2.5rem;
         height: 0.25rem;
-        background: red;
+        background: #3bffff;
         border-radius: 9999px;
         display: flex;
         justify-content: center;
         align-items: center;
         top: 0;
         left: 0;
+        z-index: 1;
+      }
+      .slider_progress_buffer{
+        background-color: #6eeeff4c;
+        z-index: 0;
       }
     }
     .slider_thumb {
       position: absolute;
       width: 1rem;
       height: 1rem;
-      background: red;
+      background: #3bffff;
+      box-shadow: 0 0 10px #3bffff88;
       display: flex;
       border-radius: 50%;
       justify-content: center;
@@ -137,6 +163,7 @@ const Container = styled.div`
       top: -6px;
       left: 2rem;
       cursor: pointer;
+      z-index: 9;
     }
   }
 `;

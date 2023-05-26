@@ -5,6 +5,7 @@ import TrackCard from "./TrackCard";
 import { getPlaylistItemsFromId } from "../utils/api";
 import CloseBtn from "./CloseBtn";
 import Loader from "../shared/Loader";
+import { playerControlIcons } from "../utils/constant";
 
 const PlayingPlaylist = () => {
   const [
@@ -19,28 +20,29 @@ const PlayingPlaylist = () => {
   ] = useStateProvider();
 
   useEffect(() => {
-    dispatch({
-      type: "SET_SELECTED_PLAYLIST_ITEMS",
-      selectedPlaylistItems: [],
-    });
-    dispatch({
-      type: "SET_LOADING",
-      loading: true,
-    });
-    getPlaylistItemsFromId(selectedPlaylist?.id).then(async (data) => {
+    if (selectedPlaylist?.id) {
       dispatch({
         type: "SET_SELECTED_PLAYLIST_ITEMS",
-        selectedPlaylistItems: data,
+        selectedPlaylistItems: [],
       });
       dispatch({
         type: "SET_LOADING",
-        loading: false,
+        loading: true,
       });
-    });
+      getPlaylistItemsFromId(selectedPlaylist?.id).then(async (data) => {
+        dispatch({
+          type: "SET_SELECTED_PLAYLIST_ITEMS",
+          selectedPlaylistItems: data,
+        });
+        dispatch({
+          type: "SET_LOADING",
+          loading: false,
+        });
+      });
+    }
   }, [selectedPlaylist]);
 
   const handleCloseBtn = () => {
-    console.log(isPlaylistSelected);
     dispatch({
       type: "IS_PLAYLIST_SELECTED",
       isPlaylistSelected: false,
@@ -54,13 +56,25 @@ const PlayingPlaylist = () => {
       </div>
       <div className="playlist_details">
         <div className="img">
-          <img src={selectedPlaylist?.thumbnail?.url} alt="" />
+          {selectedPlaylist?.thumbnail?.url ? (
+            <img src={selectedPlaylist?.thumbnail?.url} alt="" />
+          ) : (
+            <playerControlIcons.musicNote />
+          )}
         </div>
         <div className="text">
-          <h2 className="title">
-            {selectedPlaylist?.title?.split(" ").slice(0, 2).join(" ")}
-          </h2>
-          <p className="subtitle">{selectedPlaylist?.channel?.name}</p>
+          {selectedPlaylist?.title ? (
+            <h2 className="title">
+              {selectedPlaylist?.title?.split(" ").slice(0, 2).join(" ")}
+            </h2>
+          ) : (
+            <h2 className="title">{"Your favroute"}</h2>
+          )}
+          {selectedPlaylist?.channel?.name ? (
+            <p className="subtitle">{selectedPlaylist?.channel?.name}</p>
+          ) : (
+            <p className="subtitle">{selectedPlaylistItems.length} songs</p>
+          )}
           <div className="buttons">button</div>
         </div>
       </div>
@@ -87,6 +101,7 @@ const Container = styled.div`
   flex: 0.3 1 0%;
   flex-direction: column;
   padding-bottom: 2rem;
+  height: 100%;
   .close_btn {
     display: flex;
     position: fixed;
@@ -108,6 +123,15 @@ const Container = styled.div`
       aspect-ratio: 1;
       border-radius: 0.75rem;
       max-width: 8rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-shrink: 0;
+      svg {
+        width: 100%;
+        height: 100%;
+        background: #ccc;
+      }
     }
     .text {
       display: flex;
@@ -134,7 +158,7 @@ const Container = styled.div`
     overflow-y: auto;
     height: calc(100vh - 280px);
     padding: 1rem 0.5rem 2rem;
-    &::-webkit-scrollbar{
+    &::-webkit-scrollbar {
       display: none;
     }
   }

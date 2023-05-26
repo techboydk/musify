@@ -20,6 +20,7 @@ import DownloadIcon from "@mui/icons-material/Download";
 import MusicNoteIcon from '@mui/icons-material/MusicNote';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import GraphicEqIcon from '@mui/icons-material/GraphicEq';
+import CheckIcon from '@mui/icons-material/Check';
 
 export const icons = [
   { name: "Home", icon: <HomeIcon />, type: "home" },
@@ -44,18 +45,30 @@ export const playerControlIcons = {
   repeat: RepeatIcon,
   repeatOne: RepeatOneIcon,
   download: DownloadIcon,
+  downloaded: CheckIcon,
   musicNote: MusicNoteIcon,
   playing: GraphicEqIcon,
 };
 
 export const playlistsKeyWords = [
   {
-    title: "trending now",
-    keywords: [
-      "trending bollywood song",
-      "trending tollywood song",
-      "trending hollywood song",
-      " evergreen hindi song",
-    ],
+    title: "top bhakti playlists",
+    keyword: "top+bhakti+songs+playlist",
+  },
+  {
+    title: "top hindi playlists",
+    keyword: "trending+hindi+playlist",
+  },
+  {
+    title: "top english playlists",
+    keyword: "trending+english+playlist",
+  },
+  {
+    title: "top bhojpuri playlists",
+    keyword: "trending+bhojapuri+playlist",
+  },
+  {
+    title: "top punjabi playlists",
+    keyword: "trending+punjabi+playlist",
   },
 ];

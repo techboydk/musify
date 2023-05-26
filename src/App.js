@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useStateProvider } from "./utils/StateProvider";
 import Layout from "./Layout";
@@ -6,9 +6,11 @@ import Login from "./Login";
 import { Route, Routes } from "react-router-dom";
 import SearchPage from "./components/SearchPage";
 import Player2 from "./shared/player2";
+import { createHomeData } from "./utils/api";
+import { playlistsKeyWords } from "./utils/constant";
 
 const App = () => {
-  const [{ user, online, isMobile, isPlayerFullScreen }, dispatch] =
+  const [{ user, online, isMobile, isPlayerFullScreen, homeData, isPlaylistSelected }, dispatch] =
     useStateProvider();
 
   useEffect(() => {
@@ -32,6 +34,48 @@ const App = () => {
     };
   }, [isMobile, dispatch]);
 
+  useEffect(() => {
+    const handleConnectionChange = () => {
+      const { downlink } = navigator.connection;
+      dispatch({
+        type: "SET_INTERNETSTRENGTH",
+        internetStrength: downlink,
+      })
+    };
+
+    if (navigator.connection) {
+      navigator.connection.addEventListener("change", handleConnectionChange);
+    }
+
+    return () => {
+      if (navigator.connection) {
+        navigator.connection.removeEventListener(
+          "change",
+          handleConnectionChange
+        );
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    // Call the createHomeData function
+    !homeData &&
+      createHomeData(playlistsKeyWords)
+        .then((HomeData) => {
+          // Handle the HomeData here
+          console.log(HomeData);
+          dispatch({
+            type: "SET_HOMEDATA",
+            homeData: HomeData,
+          });
+          localStorage.setItem("homeData", JSON.stringify(HomeData));
+          // You can perform further operations with HomeData as needed
+        })
+        .catch((error) => {
+          // Handle any errors that occur during the process
+          console.error(error);
+        });
+  }, []);
   useEffect(() => {
     const _user = window.localStorage.getItem("username");
 
@@ -65,7 +109,7 @@ const App = () => {
         <Route path="/searchpage" element={<SearchPage />} />
       </Routes>
       <div className={isPlayerFullScreen ? "fullscreen player" : "player"}>
-        <Player2/>
+        {isPlaylistSelected && <Player2 />}
       </div>
     </Container>
   );

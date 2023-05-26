@@ -1,46 +1,53 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useRef, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { getSearchDataFromApi } from "../utils/api";
-import { useStateProvider } from '../utils/StateProvider';
+import { useStateProvider } from "../utils/StateProvider";
 
 const Searchbar = ({ Ref, Icon, back, search }) => {
-  const [{},dispatch] = useStateProvider();
+  const [{}, dispatch] = useStateProvider();
   const [inputValue, setInputValue] = useState();
-  const navigate = useNavigate()
-
+  const navigate = useNavigate();
+  const inputRef = useRef();
+  const location = useLocation();
 
   const clickHandler = (e) => {
-    if(window.location.hash.split("/")[1]!=='searchpage'){
-      navigate("/searchpage")
+    if (window.location.hash.split("/")[1] !== "searchpage") {
+      navigate("/searchpage");
     }
+
   };
+  useEffect(() => {
+    if (window.location.hash.split("/")[1] === "searchpage") {
+      inputRef.current.focus();
+    }
+
+  }, []);
 
   const searchQueryHandler = (event) => {
     if (event?.key === "Enter" && inputValue?.length > 0) {
       dispatch({
-        type:"query",
+        type: "query",
         query: inputValue,
       });
       dispatch({
-        type:"SET_LOADING",
+        type: "SET_LOADING",
         loading: true,
       });
-      getSearchDataFromApi(inputValue).then(data=>{
+      getSearchDataFromApi(inputValue).then((data) => {
         dispatch({
-          type:"SET_SEARCH_RESULTS",
+          type: "SET_SEARCH_RESULTS",
           searchResults: data,
         });
         dispatch({
-          type:"SET_SELECTED_PLAYLIST_ITEMS",
+          type: "SET_SELECTED_PLAYLIST_ITEMS",
           selectedPlaylistItems: data,
-        })
+        });
         dispatch({
-          type:"SET_LOADING",
+          type: "SET_LOADING",
           loading: false,
         });
       });
-
     }
   };
 
@@ -51,6 +58,7 @@ const Searchbar = ({ Ref, Icon, back, search }) => {
         type="text"
         name="search"
         id="search"
+        ref={inputRef}
         placeholder="Songs, Album, Artists, Podcasts ..."
         onChange={(e) => {
           setInputValue(e.target.value);

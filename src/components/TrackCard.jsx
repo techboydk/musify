@@ -5,7 +5,7 @@ import { playerControlIcons } from "../utils/constant";
 
 const TrackCard = ({ track }) => {
   const [
-    { selectedTrack, selectedTrackIndex, selectedPlaylistItems },
+    { selectedTrack, isPlaylistSelected, selectedPlaylistItems },
     dispatch,
   ] = useStateProvider();
 
@@ -32,6 +32,10 @@ const TrackCard = ({ track }) => {
     dispatch({
       type: "SET_SELECTED_TRACK_INDEX",
       selectedTrackIndex: selectedPlaylistItems.indexOf(track),
+    });
+    dispatch({
+      type: "IS_PLAYLIST_SELECTED",
+      isPlaylistSelected: true,
     });
   };
   return (

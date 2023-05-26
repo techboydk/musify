@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import { icons } from "../utils/constant";
 import { useStateProvider } from "../utils/StateProvider";
 
 const Sidebar = () => {
@@ -11,7 +10,6 @@ const Sidebar = () => {
       type: "SET_MOBILE_MENU",
       mobileMenu: false,
     });
-    console.log("mobileMenu");
   };
 
   return (
@@ -38,16 +36,6 @@ const Sidebar = () => {
               <span>v1.0.0</span>
             </div>
           </div>
-          <div className="links">
-            {icons.map((icon) => {
-              return (
-                <div className="link" key={icon.type}>
-                  {icon.icon && icon.icon}
-                  <strong>{icon.name}</strong>
-                </div>
-              );
-            })}
-          </div>
         </div>
         <div className="bottom">made by dipesh yadav</div>
       </div>
@@ -59,7 +47,7 @@ export default Sidebar;
 
 const Container = styled.div`
   display: flex;
-  flex: 0.3;
+
   height: 100%;
   position: sticky;
   top: 0;
@@ -87,10 +75,14 @@ const Container = styled.div`
   .sidebar {
     display: flex;
     flex-direction: column;
+    -webkit-box-pack: justify;
     justify-content: space-between;
+    -webkit-box-align: center;
     align-items: center;
     width: 100%;
     max-width: 250px;
+    padding: 1rem;
+    overflow: hidden;
     &.mobile {
       position: fixed;
       left: 0;
@@ -110,18 +102,24 @@ const Container = styled.div`
       display: flex;
       flex-direction: column;
       width: 100%;
+      height: 100%;
+      justify-content: center;
+      border-right: 5px #00d0ff;
+      border-right-style: outset;
+      border-radius: 50%;
       .logo {
         display: flex;
         justify-content: center;
         align-items: center;
-        width: 100%;
-        height: 25vh;
-        background-color: #222;
-        background: linear-gradient(#3a3a3a, transparent);
+
+        .logo_con {
+          transform: rotate(-90deg);
+        }
         h2 {
-          font-size: 2.5rem;
+          font-size: 5rem;
           color: transparent;
           -webkit-text-stroke: 1px #00ffc4;
+          letter-spacing: 0.75rem;
         }
         span {
           display: flex;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import Searchbar from "./Searchbar";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
@@ -12,6 +12,7 @@ const SearchPage = () => {
   const [{ searchResults, loading }, dispatch] = useStateProvider();
   const navigate = useNavigate()
 
+
   const handleBackEvent = () => {
     window.history.back()
     dispatch({
@@ -19,6 +20,10 @@ const SearchPage = () => {
       searchResults:[]
     })
   };
+
+  useEffect(()=>{
+
+  })
 
   return (
     <Container>

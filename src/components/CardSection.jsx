@@ -1,28 +1,18 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 import { useStateProvider } from "../utils/StateProvider";
 import Card from "./Card";
 import { getPlaylistDataFromApi } from "../utils/api";
 
-const CardSection = ({ title, keywords }) => {
-  const [{ allPlaylists }, dispatch] = useStateProvider();
-
-  useEffect(()=>{
-    getPlaylistDataFromApi(keywords[0]).then(res => {
-      dispatch({
-        type: "SET_ALL_PLAYLISTS",
-        allPlaylists: res,
-      })
-    })
-  },[])
-
+const CardSection = ({ playlists, title }) => {
   return (
     <Container>
-      <h4 className="title">{allPlaylists ? title : "No title"}</h4>
+      {playlists && <h4 className="title">{playlists ? title : "No title"}</h4>}
       <div className="scrollable-div">
-        {allPlaylists?.map((playlist, index) => {
-          return <Card itemData={playlist} key={index}/>;
+        {playlists[title]?.map((playlist, index) => {
+          return <Card itemData={playlist} key={index} />;
         })}
+        {title === "your favroute" && <Card itemData={playlists} title={title}/>} 
       </div>
     </Container>
   );
@@ -53,8 +43,18 @@ const Container = styled.div`
     user-select: none;
     gap: 0.5rem;
     width: 100%;
+    padding-bottom: 1.25rem;
     &::-webkit-scrollbar {
-      height: 0.25rem;
+      height: 0.35rem;
+      cursor: pointer;
+    }
+    &::-webkit-scrollbar-thumb {
+      cursor: pointer;
+    }
+    @media screen and (max-width: 1024px){
+      &::-webkit-scrollbar{
+        display: none;
+      }
     }
     &::-webkit-scrollbar-thumb {
       background-color: gray;

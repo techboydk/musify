@@ -6,6 +6,10 @@ import { playerControlIcons } from "../utils/constant";
 import CustomRangeInput from "../components/CustomRangeInput";
 import ReactPlayer from "react-player";
 import TrackCard from "../components/TrackCard";
+import { downloadSongLink } from "../utils/api";
+import Loading from "./Loading";
+import { getPlaylistItemsFromId } from "../utils/api";
+import Loader from "./Loader";
 
 const Player2 = () => {
   const [
@@ -16,13 +20,20 @@ const Player2 = () => {
       isplaying,
       selectedPlaylistItems,
       selectedTrackIndex,
+      selectedPlaylist,
+      loading,
+      internetStrength,
     },
     dispatch,
   ] = useStateProvider();
 
   const [currentTime, setCurrentTime] = useState(0);
+  const [loadedTime, setLoadedTime] = useState(0);
   const [upNextActive, setUpNextActive] = useState(false);
   const [isliked, setLiked] = useState(false);
+  const [downloadLink, setDownloadLink] = useState();
+  const [isPlayerReady, setPlayerReady] = useState(false);
+  const [isBuffering, setBuffering] = useState(false);
 
   const player = useRef(null);
 
@@ -37,10 +48,63 @@ const Player2 = () => {
       });
     }
   };
-  const handleProgress = ({ playedSeconds }) => {
+  const handleProgress = ({ playedSeconds, loadedSeconds }) => {
     setCurrentTime(Math.floor(playedSeconds));
+    setLoadedTime(Math.floor(loadedSeconds));
   };
 
+  const handlePlayerReady = () => {
+    setPlayerReady(true);
+  };
+
+  const handlePlayerBuffer = () => {
+    setBuffering(true);
+  };
+
+  const handlePlayerBufferEnd = () => {
+    setBuffering(false);
+  };
+
+  useEffect(() => {
+    if (selectedPlaylist?.id) {
+      dispatch({
+        type: "SET_SELECTED_PLAYLIST_ITEMS",
+        selectedPlaylistItems: [],
+      });
+      dispatch({
+        type: "SET_LOADING",
+        loading: true,
+      });
+      getPlaylistItemsFromId(selectedPlaylist?.id).then(async (data) => {
+        dispatch({
+          type: "SET_SELECTED_PLAYLIST_ITEMS",
+          selectedPlaylistItems: data,
+        });
+        dispatch({
+          type: "SET_LOADING",
+          loading: false,
+        });
+      });
+    }
+  }, [selectedPlaylist,dispatch]);
+
+  useEffect(() => {
+    selectedTrack &&
+      downloadSongLink(selectedTrack?.id)
+        .then((hrefs) => {
+          if (internetStrength >= 2) {
+            setDownloadLink(hrefs[0]);
+          } else {
+            setDownloadLink(hrefs[3]);
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+  }, [selectedTrack]);
+  const handleDownloadSong = () => {
+    downloadLink && window.open(downloadLink, "_blank");
+  };
   useEffect(() => {
     if (selectedTrack?.duration / 1000 - 1 === currentTime) {
       nextTrack();
@@ -111,10 +175,10 @@ const Player2 = () => {
   };
 
   useEffect(() => {
-    if(likedTrack?.find((t) => t?.id === selectedTrack?.id)){
+    if (likedTrack.find((t) => t?.id === selectedTrack?.id)) {
       setLiked(true);
-    }else{
-      setLiked(false)
+    } else {
+      setLiked(false);
     }
   }, [selectedTrack]);
   const likeTrack = () => {
@@ -127,7 +191,9 @@ const Player2 = () => {
       localStorage.setItem("likedTracks", JSON.stringify(updatedTracks));
       setLiked(true);
     } else {
-      const updatedTracks = likedTrack?.filter((t) => t?.id !== selectedTrack?.id);
+      const updatedTracks = likedTrack.filter(
+        (t) => t?.id !== selectedTrack?.id
+      );
       dispatch({
         type: "SET_LIKED_TRACK",
         likedTrack: updatedTracks,
@@ -169,9 +235,13 @@ const Player2 = () => {
     <Container className="player2" onClick={moveUpward}>
       {selectedTrack && (
         <ReactPlayer
-          url={selectedTrack?.url}
+          url={downloadLink ? downloadLink : selectedTrack?.url}
           playing={isplaying}
           onProgress={handleProgress}
+          onReady={handlePlayerReady}
+          onBuffer={handlePlayerBuffer}
+          onBufferEnd={handlePlayerBufferEnd}
+          preload="auto"
           ref={player}
           width="0"
           height="0"
@@ -227,6 +297,7 @@ const Player2 = () => {
                 maxValue={selectedTrack?.duration / 1000}
                 currentValue={currentTime}
                 seekTo={player?.current?.seekTo}
+                loadedTime={loadedTime}
               />
               <div className="times">
                 <span className="cureent_time">
@@ -255,24 +326,29 @@ const Player2 = () => {
                   onClick={prevTrack}
                   style={{ fontSize: "2.5rem" }}
                 />
-                {isplaying ? (
-                  <playerControlIcons.pause2
-                    onClick={handlePlayPause}
-                    style={{ fontSize: "3.5rem" }}
-                  />
-                ) : (
-                  <playerControlIcons.play2
-                    onClick={handlePlayPause}
-                    style={{ fontSize: "3.5rem" }}
-                  />
-                )}
+                <div className="play_pause_load">
+                  {!isPlayerReady && <Loading />}
+                  {isBuffering && <Loading />}
+
+                  {isplaying ? (
+                    <playerControlIcons.pause2
+                      onClick={handlePlayPause}
+                      style={{ fontSize: "3.5rem" }}
+                    />
+                  ) : (
+                    <playerControlIcons.play2
+                      onClick={handlePlayPause}
+                      style={{ fontSize: "3.5rem" }}
+                    />
+                  )}
+                </div>
                 <playerControlIcons.next
                   onClick={nextTrack}
                   style={{ fontSize: "2.5rem" }}
                 />
               </div>
               <div className="right">
-                <playerControlIcons.download />
+                <playerControlIcons.download onClick={handleDownloadSong} />
               </div>
             </div>
           </div>
@@ -280,6 +356,7 @@ const Player2 = () => {
         <div className={upNextActive ? "up_next active" : "up_next"}>
           <h3>Up Next</h3>
           <div className="songs_list">
+            {loading && <Loader />}
             {selectedPlaylistItems &&
               selectedPlaylistItems.map((item, index) => {
                 return <TrackCard track={item} key={index} />;
@@ -470,6 +547,9 @@ const Container = styled.div`
             align-items: center;
             justify-content: center;
             gap: 1.5rem;
+            .play_pause_load {
+              position: relative;
+            }
           }
         }
       }
@@ -477,6 +557,7 @@ const Container = styled.div`
     .up_next {
       justify-content: flex-start;
       padding: 1rem 0;
+      z-index: 99;
       h3 {
         position: relative;
         display: flex;

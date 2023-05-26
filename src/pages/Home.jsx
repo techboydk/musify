@@ -8,10 +8,9 @@ import MenuBtn from "../components/MenuBtn";
 import { playlistsKeyWords } from "../utils/constant";
 
 const Home = () => {
-  const [{ user, isMobile }] = useStateProvider();
+  const [{ user, isMobile, homeData, likedTrack}] = useStateProvider();
   return (
     <Container className={isMobile && "mobile"}>
-      <div className="menu_btn">{isMobile && <MenuBtn />}</div>
       <div className={isMobile ? "header mobile" : "header"}>
         <div className="greet_text">
           <h2>hello there!</h2>
@@ -23,9 +22,10 @@ const Home = () => {
           <Searchbar Icon={SearchIcon} />
         </div>
         <div className="card_section">
+          {likedTrack && <CardSection playlists={likedTrack} title={"your favroute"}/>}
           {
-            playlistsKeyWords.map((item, index)=>{
-              return <CardSection title={item.title} keywords={item.keywords} key={index}/>
+            homeData?.map((item, index)=>{
+              return <CardSection playlists={item} title={Object.keys(item)[0]} key={index}/>
             })
           }
         </div>
@@ -40,7 +40,11 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;
-  overflow: hidden; 
+  overflow-y: scroll;
+  user-select: none;
+  &::-webkit-scrollbar{
+    display: none;
+  } 
   &.mobile {
     flex: 1;
   }
@@ -72,12 +76,12 @@ const Container = styled.div`
     flex-direction: column;
     gap: 1.5rem;
     z-index: 0;
-    background-color: #111;
-    height: 100%;
+    background: #111;
     .search_box {
       padding: 1rem;
       position: sticky;
       top: 0;
+      z-index: 9999;
     }
     .card_section {
       display: flex;

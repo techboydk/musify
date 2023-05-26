@@ -1,28 +1,64 @@
 import React from "react";
 import styled from "styled-components";
 import { useStateProvider } from "../utils/StateProvider";
+import { playerControlIcons } from "../utils/constant";
 
-const Card = ({ itemData }) => {
+const Card = ({ itemData, title }) => {
   const [{ selectedPlaylist }, dispatch] = useStateProvider();
 
   const handleClick = () => {
+    if (title === "your favroute") {
+      dispatch({
+        type: "SET_SELECTED_PLAYLIST_ITEMS",
+        selectedPlaylistItems: itemData,
+      });
+      dispatch({
+        type: "SET_Playlist",
+        selectedPlaylist: itemData,
+      });
+    } else {
+      dispatch({
+        type: "SET_Playlist",
+        selectedPlaylist: itemData,
+      });
+    }
     dispatch({
-      type: "SET_Playlist",
-      selectedPlaylist: itemData,
-    })
-    dispatch({
-      type:"IS_PLAYLIST_SELECTED",
+      type: "IS_PLAYLIST_SELECTED",
       isPlaylistSelected: true,
     });
-
+    dispatch({
+      type: "IS_PLAYER_FULLSCREEN",
+      isPlayerFullScreen: true,
+    });
   };
   return (
     <Container onClick={handleClick}>
       <div className="img">
-        <img src={itemData?.thumbnail?.url} alt="" />
+        {itemData?.thumbnail?.url ? (
+          <div
+            className="song_poster"
+            style={{
+              backgroundImage: `url(${itemData?.thumbnail?.url})`,
+              width: "100%",
+              height: "100%",
+            }}
+          ></div>
+        ) : (
+          <playerControlIcons.musicNote />
+        )}
       </div>
-      <h4 className="title">{itemData?.title?.split(" ").slice(0,2).join(' ')}</h4>
-      <p className="subtitle">{itemData?.channel?.name}</p>
+      {itemData?.title ? (
+        <h4 className="title">
+          {itemData?.title?.split(" ").slice(0, 2).join(" ")}
+        </h4>
+      ) : (
+        <h4 className="title">{title}</h4>
+      )}
+      {itemData?.channel?.name ? (
+        <p className="subtitle">{itemData?.channel?.name}</p>
+      ) : (
+        <p className="subtitle">{itemData.length} songs</p>
+      )}
     </Container>
   );
 };
@@ -33,6 +69,7 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   cursor: pointer;
+  user-select: none;
   &:first-child {
     margin-left: 1rem;
   }
@@ -44,6 +81,14 @@ const Container = styled.div`
     width: 9rem;
     border-radius: 0.75rem;
     overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    svg {
+      width: 100%;
+      height: 100%;
+      background: #ccc;
+    }
     img {
       width: 100%;
       height: 100%;
@@ -54,7 +99,7 @@ const Container = styled.div`
   h4.title {
     margin: 0.5rem 0 0.25rem;
     font: status-bar;
-    font-size: .75rem;
+    font-size: 0.75rem;
     font-weight: 800;
     text-align: center;
     white-space: nowrap;

@@ -13,7 +13,6 @@ const Layout = () => {
     <React.Fragment>
       <Sidebar/>
       <Home/>
-      {isPlaylistSelected && <PlayingPlaylist/>}
     </React.Fragment>
   );
 };

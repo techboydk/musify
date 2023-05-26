@@ -1,6 +1,7 @@
 export const initialState = {
-  user: null,
+  user: window.localStorage.getItem("username"),
   online: true,
+  internetStrength: null,
   loading: false,
   isplaying: false,
   mobileMenu: false,
@@ -14,7 +15,8 @@ export const initialState = {
   selectedPlaylistItems: [],
   selectedTrack: null,
   selectedTrackIndex: 0,
-  likedTrack: JSON.parse(localStorage.getItem('likedTracks')) || [],
+  likedTrack: JSON.parse(window.localStorage.getItem("likedTracks")) || [],
+  homeData: JSON.parse(window.localStorage.getItem("homeData")),
 };
 
 const reducer = (state, action) => {
@@ -30,7 +32,11 @@ const reducer = (state, action) => {
         ...state,
         online: action.online,
       };
-
+    case "SET_INTERNETSTRENGTH":
+      return {
+        ...state,
+        internetStrength: action.internetStrength,
+      };
     case "SET_LOADING":
       return {
         ...state,
@@ -112,7 +118,11 @@ const reducer = (state, action) => {
         ...state,
         likedTrack: action.likedTrack,
       };
-
+    case "SET_HOMEDATA":
+      return {
+        ...state,
+        homeData: action.homeData,
+      };
     default:
       return state;
   }

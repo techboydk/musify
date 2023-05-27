@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useStateProvider } from "../utils/StateProvider";
 import { playerControlIcons } from "../utils/constant";
+import { formatTitle } from "../utils/constant";
 
 const TrackCard = ({ track }) => {
   const [
@@ -49,9 +50,7 @@ const TrackCard = ({ track }) => {
         )}
       </div>
       <div className="detail">
-        <h4 className="track_title">
-          {track?.title?.split("|")[0]?.split(" ").slice(0, 4).join(" ")}
-        </h4>
+        <h4 className="track_title">{formatTitle(track?.title)}</h4>
         <p className="track_subtitle">{track?.channel?.name}</p>
       </div>
     </Container>

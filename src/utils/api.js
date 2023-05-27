@@ -50,27 +50,3 @@ export const createHomeData = async (playlistsKeyWords) => {
   return HomeData;
 };
 
-
-export const downloadSongLink = async(id) => {
-
-  const url = `https://api.vevioz.com/api/button/mp3/${id}`;
-  try {
-    const response = await axios.get(url);
-    const html = response.data;
-
-    // Load the HTML content into Cheerio
-    const $ = cheerio.load(html);
-
-    // Find all the <a> tags and get their href values
-    const hrefs = [];
-    $('a').each((index, element) => {
-      const href = $(element).attr('href');
-      hrefs.push(href);
-    });
-
-    return hrefs;
-  } catch (error) {
-    console.error('Error:', error);
-    return [];
-  }
-}

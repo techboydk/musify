@@ -8,6 +8,7 @@ import SearchPage from "./components/SearchPage";
 import Player2 from "./shared/player2";
 import { createHomeData } from "./utils/api";
 import { playlistsKeyWords } from "./utils/constant";
+import axios from "axios";
 
 
 const App = () => {
@@ -36,6 +37,7 @@ const App = () => {
   }, [isMobile, dispatch]);
 
   useEffect(() => {
+
 
     const handleConnectionChange = () => {
       const { downlink } = navigator.connection;

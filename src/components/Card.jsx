@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { useStateProvider } from "../utils/StateProvider";
 import { playerControlIcons } from "../utils/constant";
+import { formatTitle } from "../utils/constant";
 
 const Card = ({ itemData, title }) => {
   const [{ selectedPlaylist }, dispatch] = useStateProvider();
@@ -49,7 +50,7 @@ const Card = ({ itemData, title }) => {
       </div>
       {itemData?.title ? (
         <h4 className="title">
-          {itemData?.title?.split(" ").slice(0, 2).join(" ")}
+          {formatTitle(itemData?.title)}
         </h4>
       ) : (
         <h4 className="title">{title}</h4>

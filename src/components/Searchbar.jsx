@@ -5,7 +5,7 @@ import { getSearchDataFromApi } from "../utils/api";
 import { useStateProvider } from "../utils/StateProvider";
 
 const Searchbar = ({ Ref, Icon, back, search }) => {
-  const [{}, dispatch] = useStateProvider();
+  const [{isMobile}, dispatch] = useStateProvider();
   const [inputValue, setInputValue] = useState();
   const navigate = useNavigate();
   const inputRef = useRef();
@@ -37,8 +37,8 @@ const Searchbar = ({ Ref, Icon, back, search }) => {
       getSearchDataFromApi(inputValue).then((data) => {
         const allTrack = []
         data.map((track)=>{
-          track?.duration !== 0 && allTrack.push(track)
-        });
+          track?.duration !== 0 && isMobile ? track?.duration/1000 <= 600 && allTrack.push(track) : allTrack.push(track);
+        })
         dispatch({
           type: "SET_SEARCH_RESULTS",
           searchResults: allTrack,

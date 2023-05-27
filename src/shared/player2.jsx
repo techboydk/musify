@@ -4,13 +4,13 @@ import { useStateProvider } from "../utils/StateProvider";
 import CloseBtn from "../components/CloseBtn";
 import { playerControlIcons } from "../utils/constant";
 import CustomRangeInput from "../components/CustomRangeInput";
-import ReactPlayer from "react-player";
 import TrackCard from "../components/TrackCard";
-import { downloadSongLink } from "../utils/api";
+import { getAudioLinkFromTitle } from "../utils/SoundCloudApi";
 import Loading from "./Loading";
 import { getPlaylistItemsFromId } from "../utils/api";
 import Loader from "./Loader";
 import MusicPlayer from "../components/MusicPlayer";
+import { formatTitle } from "../utils/constant";
 
 const Player2 = () => {
   const [
@@ -24,6 +24,7 @@ const Player2 = () => {
       selectedPlaylist,
       loading,
       internetStrength,
+      isMobile
     },
     dispatch,
   ] = useStateProvider();
@@ -99,18 +100,14 @@ const Player2 = () => {
 
   useEffect(() => {
     setDownloadLink(null);
-    selectedTrack &&
-      downloadSongLink(selectedTrack?.id)
-        .then((hrefs) => {
-          if (internetStrength >= 2) {
-            setDownloadLink(hrefs[0]);
-          } else {
-            setDownloadLink(hrefs[3]);
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+    selectedTrack && getAudioLinkFromTitle(selectedTrack?.title).then(link=> {
+      setDownloadLink(link)
+    }).catch(error => {
+      // Code to handle the error
+      console.error('Error:', error);
+      isMobile && nextTrack();
+      // Perform error handling or display an error message to the user
+    });;
   }, [selectedTrack]);
   const handleDownloadSong = () => {
     downloadLink && window.open(downloadLink, "_blank");
@@ -187,7 +184,6 @@ const Player2 = () => {
   useEffect(() => {
     setCurrentTime(0);
     setLoadedTime(0);
-    console.log(selectedTrack);
     if (likedTrack.find((t) => t?.id === selectedTrack?.id)) {
       setLiked(true);
     } else {
@@ -249,6 +245,7 @@ const Player2 = () => {
       {selectedTrack && (
         <MusicPlayer
           selectedTrack={selectedTrack}
+          audioLink = {downloadLink}
           handleProgress={handleProgress}
           handlePlayerReady={handlePlayerReady}
           handlePlayerBuffer={handlePlayerBuffer}
@@ -290,11 +287,7 @@ const Player2 = () => {
             </div>
             <div className="marquee">
               <h2 className="song_title">
-                {selectedTrack?.title
-                  ?.split("-")[0]
-                  ?.split(" ")
-                  .slice(0, 4)
-                  .join(" ")}
+                 {selectedTrack && formatTitle(selectedTrack?.title)}
               </h2>
             </div>
             <p className="subtitle">{selectedTrack?.channel?.name}</p>
@@ -315,7 +308,7 @@ const Player2 = () => {
                 </span>
                 <span className="total_time">
                   {selectedTrack
-                    ? formatTime(selectedTrack?.duration / 1000)
+                    ? formatTime(Math.floor(player?.current?.getDuration()))
                     : "00:00"}
                 </span>
               </div>
@@ -337,18 +330,25 @@ const Player2 = () => {
                   style={{ fontSize: "2.5rem" }}
                 />
                 <div className="play_pause_load">
-                  {!isPlayerReady  && <Loading />}
-                  {isBuffering  && <Loading />}
+                  {downloadLink && !isPlayerReady || (isBuffering && <Loading />)}
 
                   {isplaying ? (
                     <playerControlIcons.pause2
                       onClick={handlePlayPause}
-                      style={{ fontSize: "3.5rem", position:"relative", zIndex: "9" }}
+                      style={{
+                        fontSize: "3.5rem",
+                        position: "relative",
+                        zIndex: "9",
+                      }}
                     />
                   ) : (
                     <playerControlIcons.play2
                       onClick={handlePlayPause}
-                      style={{ fontSize: "3.5rem", position:"relative", zIndex: "9" }}
+                      style={{
+                        fontSize: "3.5rem",
+                        position: "relative",
+                        zIndex: "9",
+                      }}
                     />
                   )}
                 </div>

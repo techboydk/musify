@@ -72,3 +72,24 @@ export const playlistsKeyWords = [
     keyword: "trending+punjabi+playlist",
   },
 ];
+
+
+export const formatTitle = (q) => {
+  // Define the specific words to be removed (case-insensitive)
+  var wordsToRemove = ['video', 'songs', 'song', 'top', 'trending', 'vide'];
+
+  // Create a regular expression pattern to match the words
+  var wordPattern = new RegExp('\\b(' + wordsToRemove.join('|') + ')\\b', 'gi');
+
+  // Replace the matched words with an empty string
+  var modifiedText = q.replace(wordPattern, '');
+
+  // Define a regular expression pattern to match special characters
+  var specialCharPattern = /[^a-zA-Z0-9\s\u0900-\u097F]/g;
+
+  // Remove the special characters from the modified text
+  modifiedText = modifiedText.replace(specialCharPattern, '');
+  modifiedText = modifiedText.replace(/\s+/g, ' ').trim();
+  modifiedText = modifiedText.replace(/\b\w\b/g, '');
+  return modifiedText.trim().split(/\s+/).slice(0, 4).join(' ');
+}

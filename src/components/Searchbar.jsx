@@ -35,13 +35,17 @@ const Searchbar = ({ Ref, Icon, back, search }) => {
         loading: true,
       });
       getSearchDataFromApi(inputValue).then((data) => {
+        const allTrack = []
+        data.map((track)=>{
+          track?.duration !== 0 && allTrack.push(track)
+        });
         dispatch({
           type: "SET_SEARCH_RESULTS",
-          searchResults: data,
+          searchResults: allTrack,
         });
         dispatch({
           type: "SET_SELECTED_PLAYLIST_ITEMS",
-          selectedPlaylistItems: data,
+          selectedPlaylistItems: allTrack,
         });
         dispatch({
           type: "SET_LOADING",

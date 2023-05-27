@@ -10,6 +10,7 @@ import { downloadSongLink } from "../utils/api";
 import Loading from "./Loading";
 import { getPlaylistItemsFromId } from "../utils/api";
 import Loader from "./Loader";
+import MusicPlayer from "../components/MusicPlayer";
 
 const Player2 = () => {
   const [
@@ -81,14 +82,23 @@ const Player2 = () => {
           selectedPlaylistItems: data,
         });
         dispatch({
+          type: "SET_SELECTED_TRACK",
+          selectedTrack: data[0],
+        });
+        dispatch({
+          type: "SET_PLAYING",
+          isplaying: true,
+        });
+        dispatch({
           type: "SET_LOADING",
           loading: false,
         });
       });
     }
-  }, [selectedPlaylist,dispatch]);
+  }, [selectedPlaylist, dispatch]);
 
   useEffect(() => {
+    setDownloadLink(null);
     selectedTrack &&
       downloadSongLink(selectedTrack?.id)
         .then((hrefs) => {
@@ -175,6 +185,9 @@ const Player2 = () => {
   };
 
   useEffect(() => {
+    setCurrentTime(0);
+    setLoadedTime(0);
+    console.log(selectedTrack);
     if (likedTrack.find((t) => t?.id === selectedTrack?.id)) {
       setLiked(true);
     } else {
@@ -234,20 +247,16 @@ const Player2 = () => {
   return (
     <Container className="player2" onClick={moveUpward}>
       {selectedTrack && (
-        <ReactPlayer
-          url={downloadLink ? downloadLink : selectedTrack?.url}
-          playing={isplaying}
-          onProgress={handleProgress}
-          onReady={handlePlayerReady}
-          onBuffer={handlePlayerBuffer}
-          onBufferEnd={handlePlayerBufferEnd}
-          preload="auto"
-          ref={player}
-          width="0"
-          height="0"
-          style={{ display: "none", position: "absolute" }}
+        <MusicPlayer
+          selectedTrack={selectedTrack}
+          handleProgress={handleProgress}
+          handlePlayerReady={handlePlayerReady}
+          handlePlayerBuffer={handlePlayerBuffer}
+          handlePlayerBufferEnd={handlePlayerBufferEnd}
+          player={player}
         />
       )}
+
       <div
         className={
           isPlayerFullScreen
@@ -298,6 +307,7 @@ const Player2 = () => {
                 currentValue={currentTime}
                 seekTo={player?.current?.seekTo}
                 loadedTime={loadedTime}
+                selectedTrack={selectedTrack}
               />
               <div className="times">
                 <span className="cureent_time">
@@ -327,18 +337,18 @@ const Player2 = () => {
                   style={{ fontSize: "2.5rem" }}
                 />
                 <div className="play_pause_load">
-                  {!isPlayerReady && <Loading />}
-                  {isBuffering && <Loading />}
+                  {!isPlayerReady  && <Loading />}
+                  {isBuffering  && <Loading />}
 
                   {isplaying ? (
                     <playerControlIcons.pause2
                       onClick={handlePlayPause}
-                      style={{ fontSize: "3.5rem" }}
+                      style={{ fontSize: "3.5rem", position:"relative", zIndex: "9" }}
                     />
                   ) : (
                     <playerControlIcons.play2
                       onClick={handlePlayPause}
-                      style={{ fontSize: "3.5rem" }}
+                      style={{ fontSize: "3.5rem", position:"relative", zIndex: "9" }}
                     />
                   )}
                 </div>

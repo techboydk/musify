@@ -9,6 +9,7 @@ import Player2 from "./shared/player2";
 import { createHomeData } from "./utils/api";
 import { playlistsKeyWords } from "./utils/constant";
 
+
 const App = () => {
   const [{ user, online, isMobile, isPlayerFullScreen, homeData, isPlaylistSelected }, dispatch] =
     useStateProvider();
@@ -35,6 +36,7 @@ const App = () => {
   }, [isMobile, dispatch]);
 
   useEffect(() => {
+
     const handleConnectionChange = () => {
       const { downlink } = navigator.connection;
       dispatch({

@@ -22,11 +22,14 @@ const CustomRangeInput = ({
   useEffect(()=>{
     setLoadedValue(loadedTime)
   },[loadedTime])
+  useEffect(()=>{
+    //selectedTrack && seekTo(0)
+  },[selectedTrack])
 
   useEffect(() => {
     const handleMove = (clientX, rect) => {
       const newValue = calculateNewValue(clientX, rect);
-      seekTo(newValue);
+      selectedTrack && seekTo(newValue);
     };
 
     const handleTouchMove = (e) => {
@@ -80,7 +83,7 @@ const CustomRangeInput = ({
     if (!isDragging.current) {
       const rect = sliderRef.current.getBoundingClientRect();
       const newValue = calculateNewValue(e.clientX, rect);
-      seekTo(newValue);
+      selectedTrack && seekTo(newValue);
     }
   };
 

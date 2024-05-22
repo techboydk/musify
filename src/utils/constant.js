@@ -53,23 +53,18 @@ export const playerControlIcons = {
 export const playlistsKeyWords = [
   {
     title: "top bhakti playlists",
-    keyword: "top+bhakti+songs+playlist",
   },
   {
     title: "top hindi playlists",
-    keyword: "trending+hindi+playlist",
   },
   {
     title: "top english playlists",
-    keyword: "trending+english+playlist",
   },
   {
     title: "top bhojpuri playlists",
-    keyword: "trending+bhojapuri+playlist",
   },
   {
     title: "top punjabi playlists",
-    keyword: "trending+punjabi+playlist",
   },
 ];
 
@@ -91,5 +86,26 @@ export const formatTitle = (q) => {
   modifiedText = modifiedText.replace(specialCharPattern, '');
   modifiedText = modifiedText.replace(/\s+/g, ' ').trim();
   modifiedText = modifiedText.replace(/\b\w\b/g, '');
-  return modifiedText.trim().split(/\s+/).slice(0, 4).join(' ');
+  return modifiedText.trim().split(/\s+/).slice(0, 5).join(' ');
+}
+
+export const totalDuration = (time) => {
+  const parts = time?.split(':').map(Number);
+  
+  let hours = 0, minutes = 0, seconds = 0;
+  
+  if (parts?.length === 2) {
+      // Format is MM:SS
+      [minutes, seconds] = parts;
+  } else if (parts?.length === 3) {
+      // Format is HH:MM:SS
+      [hours, minutes, seconds] = parts;
+  } else {
+      return 0;
+  }
+  
+  // Calculate total minutes
+  const totalduration = (hours * 3600) + (minutes * 60) + seconds;
+  
+  return totalduration;
 }

@@ -5,7 +5,7 @@ import { playerControlIcons } from "../utils/constant";
 import { formatTitle } from "../utils/constant";
 
 const Card = ({ itemData, title }) => {
-  const [{ selectedPlaylist }, dispatch] = useStateProvider();
+  const [{ }, dispatch] = useStateProvider();
 
   const handleClick = () => {
     if (title === "your favroute") {
@@ -35,11 +35,11 @@ const Card = ({ itemData, title }) => {
   return (
     <Container onClick={handleClick}>
       <div className="img">
-        {itemData?.thumbnail?.url ? (
+        {itemData?.thumbnail?.[2]?.url ? (
           <div
             className="song_poster"
             style={{
-              backgroundImage: `url(${itemData?.thumbnail?.url})`,
+              backgroundImage: `url(${itemData?.thumbnail?.[2]?.url})`,
               width: "100%",
               height: "100%",
             }}
@@ -55,8 +55,8 @@ const Card = ({ itemData, title }) => {
       ) : (
         <h4 className="title">{title}</h4>
       )}
-      {itemData?.channel?.name ? (
-        <p className="subtitle">{itemData?.channel?.name}</p>
+      {itemData?.channelTitle ? (
+        <p className="subtitle">{itemData?.channelTitle }</p>
       ) : (
         <p className="subtitle">{itemData.length} songs</p>
       )}

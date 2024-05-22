@@ -5,12 +5,14 @@ import CloseBtn from "../components/CloseBtn";
 import { playerControlIcons } from "../utils/constant";
 import CustomRangeInput from "../components/CustomRangeInput";
 import TrackCard from "../components/TrackCard";
-import { getAudioLinkFromTitle } from "../utils/SoundCloudApi";
 import Loading from "./Loading";
 import { getPlaylistItemsFromId } from "../utils/api";
 import Loader from "./Loader";
 import MusicPlayer from "../components/MusicPlayer";
 import { formatTitle } from "../utils/constant";
+import {totalDuration} from "../utils/constant";
+
+
 
 const Player2 = () => {
   const [
@@ -22,9 +24,7 @@ const Player2 = () => {
       selectedPlaylistItems,
       selectedTrackIndex,
       selectedPlaylist,
-      loading,
-      internetStrength,
-      isMobile
+      loading
     },
     dispatch,
   ] = useStateProvider();
@@ -68,7 +68,7 @@ const Player2 = () => {
   };
 
   useEffect(() => {
-    if (selectedPlaylist?.id) {
+    if (selectedPlaylist?.playlistId) {
       dispatch({
         type: "SET_SELECTED_PLAYLIST_ITEMS",
         selectedPlaylistItems: [],
@@ -77,7 +77,7 @@ const Player2 = () => {
         type: "SET_LOADING",
         loading: true,
       });
-      getPlaylistItemsFromId(selectedPlaylist?.id).then(async (data) => {
+      getPlaylistItemsFromId(selectedPlaylist?.playlistId).then(async (data) => {
         dispatch({
           type: "SET_SELECTED_PLAYLIST_ITEMS",
           selectedPlaylistItems: data,
@@ -98,22 +98,19 @@ const Player2 = () => {
     }
   }, [selectedPlaylist, dispatch]);
 
-  useEffect(() => {
-    setDownloadLink(null);
-    selectedTrack && getAudioLinkFromTitle(selectedTrack?.title).then(link=> {
-      setDownloadLink(link)
-    }).catch(error => {
-      // Code to handle the error
-      console.error('Error:', error);
-      isMobile && nextTrack();
-      // Perform error handling or display an error message to the user
-    });;
-  }, [selectedTrack]);
+
   const handleDownloadSong = () => {
     downloadLink && window.open(downloadLink, "_blank");
   };
   useEffect(() => {
-    if (selectedTrack?.duration / 1000 - 1 === currentTime) {
+
+
+  
+    const duration = totalDuration(selectedTrack?.lengthText)
+    console.log(player?.current)
+
+
+    if (duration-1 === currentTime) {
       nextTrack();
     }
   }, [currentTime]);
@@ -184,7 +181,7 @@ const Player2 = () => {
   useEffect(() => {
     setCurrentTime(0);
     setLoadedTime(0);
-    if (likedTrack.find((t) => t?.id === selectedTrack?.id)) {
+    if (likedTrack.find((t) => t?.videoId === selectedTrack?.videoId)) {
       setLiked(true);
     } else {
       setLiked(false);
@@ -201,7 +198,7 @@ const Player2 = () => {
       setLiked(true);
     } else {
       const updatedTracks = likedTrack.filter(
-        (t) => t?.id !== selectedTrack?.id
+        (t) => t?.videoId !== selectedTrack?.videoId
       );
       dispatch({
         type: "SET_LIKED_TRACK",
@@ -266,7 +263,7 @@ const Player2 = () => {
       >
         <div
           className="song_poster"
-          style={{ backgroundImage: `url(${selectedTrack?.thumbnail?.url})` }}
+          style={{ backgroundImage: `url(${selectedTrack?.thumbnail[0]?.url})` }}
         ></div>
         <span></span>
       </div>
@@ -280,7 +277,7 @@ const Player2 = () => {
           <div className="song_details">
             <div className="song_poster">
               {selectedTrack ? (
-                <img src={selectedTrack?.thumbnail?.url} alt="" />
+                <img src={selectedTrack?.thumbnail[0]?.url} alt="" />
               ) : (
                 <playerControlIcons.musicNote />
               )}
@@ -290,13 +287,13 @@ const Player2 = () => {
                  {selectedTrack && formatTitle(selectedTrack?.title)}
               </h2>
             </div>
-            <p className="subtitle">{selectedTrack?.channel?.name}</p>
+            <p className="subtitle">{selectedTrack?.channelTitle}</p>
           </div>
           <div className="controls">
             <div className="timeline_seekbar">
               <CustomRangeInput
                 minValue={0}
-                maxValue={selectedTrack?.duration / 1000}
+                maxValue={totalDuration(selectedTrack?.lengthText)}
                 currentValue={currentTime}
                 seekTo={player?.current?.seekTo}
                 loadedTime={loadedTime}
@@ -308,7 +305,7 @@ const Player2 = () => {
                 </span>
                 <span className="total_time">
                   {selectedTrack
-                    ? formatTime(Math.floor(player?.current?.getDuration()))
+                    ? formatTime(totalDuration(selectedTrack?.lengthText))
                     : "00:00"}
                 </span>
               </div>
@@ -330,7 +327,7 @@ const Player2 = () => {
                   style={{ fontSize: "2.5rem" }}
                 />
                 <div className="play_pause_load">
-                  {downloadLink && !isPlayerReady || (isBuffering && <Loading />)}
+                  {(!isPlayerReady && isBuffering) && <Loading />}
 
                   {isplaying ? (
                     <playerControlIcons.pause2
@@ -504,7 +501,7 @@ const Container = styled.div`
         .song_poster {
           height: auto;
           width: 70%;
-          max-width: 350px;
+          max-width: 50%;
           background: #aaa;
           display: flex;
           aspect-ratio: 1;

@@ -3,15 +3,11 @@ import styled from "styled-components";
 import Searchbar from "./Searchbar";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { useStateProvider } from "../utils/StateProvider";
-import SearchCard from "./SearchCard";
 import TrackCard from "./TrackCard";
 import Loader from "../shared/Loader";
-import { useNavigate } from "react-router-dom";
 
 const SearchPage = () => {
   const [{ searchResults, loading }, dispatch] = useStateProvider();
-  const navigate = useNavigate()
-
 
   const handleBackEvent = () => {
     window.history.back()
@@ -22,7 +18,6 @@ const SearchPage = () => {
   };
 
   useEffect(()=>{
-
   })
 
   return (

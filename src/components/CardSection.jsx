@@ -1,8 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { useStateProvider } from "../utils/StateProvider";
 import Card from "./Card";
-import { getPlaylistDataFromApi } from "../utils/api";
 
 const CardSection = ({ playlists, title }) => {
   return (

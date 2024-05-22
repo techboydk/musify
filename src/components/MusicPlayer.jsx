@@ -1,23 +1,37 @@
-import React, { useRef, useEffect } from "react";
+import React, { useEffect } from "react";
 import ReactPlayer from "react-player";
 import { useStateProvider } from "../utils/StateProvider";
 
 const MusicPlayer = ({
   selectedTrack,
   handleProgress,
-  handlePlayerReady,
   handlePlayerBuffer,
   handlePlayerBufferEnd,
-  player,
-  audioLink
+  player
 }) => {
-  const [{ isplaying,isMobile }] = useStateProvider();
+  const [{ isplaying }] = useStateProvider();
+
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        player.current.getInternalPlayer().playVideo();
+      } else {
+        player.current.getInternalPlayer().playVideo();
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, []);
 
   return (
     <>
       {selectedTrack && (
         <ReactPlayer
-          url={isMobile ? audioLink : selectedTrack?.url}
+          url={`https://www.youtube.com/watch?v=${selectedTrack.videoId}`}
           playing={isplaying}
           onProgress={handleProgress}
           onBuffer={handlePlayerBuffer}

@@ -6,14 +6,15 @@ import { formatTitle } from "../utils/constant";
 
 const TrackCard = ({ track }) => {
   const [
-    { selectedTrack, isPlaylistSelected, selectedPlaylistItems },
+    { selectedTrack, selectedPlaylistItems },
     dispatch,
   ] = useStateProvider();
 
-  const [isPlaying, setPlaying] = useState(true);
+  const [isPlaying, setPlaying] = useState(false);
 
   useEffect(() => {
-    if (selectedTrack?.id === track?.id) {
+  
+    if (selectedTrack?.videoId === track?.videoId) {
       setPlaying(true);
       console.log(isPlaying);
     } else {
@@ -42,7 +43,7 @@ const TrackCard = ({ track }) => {
   return (
     <Container onClick={handleClick}>
       <div className="img">
-        <img src={track?.thumbnail?.url} alt={track?.title?.split("|")[0]} />
+        <img src={track?.thumbnail[0]?.url} alt={track?.title?.split("|")[0]} />
         {isPlaying && (
           <span>
             <playerControlIcons.playing />

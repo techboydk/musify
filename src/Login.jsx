@@ -1,11 +1,10 @@
 import React, { useState } from 'react'
-import { useContext } from 'react';
 import styled from 'styled-components';
 import { useStateProvider } from './utils/StateProvider';
 
 const Login = () => {
   const [inputValue, setInputValue] = useState('');
-  const [{user}, dispatch] = useStateProvider();
+  const [dispatch] = useStateProvider();
 
 
   const handleChange = (event) => {

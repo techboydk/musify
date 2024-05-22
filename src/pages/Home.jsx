@@ -4,8 +4,6 @@ import CardSection from "../components/CardSection";
 import Searchbar from "../components/Searchbar";
 import { useStateProvider } from "../utils/StateProvider";
 import SearchIcon from "@mui/icons-material/Search";
-import MenuBtn from "../components/MenuBtn";
-import { playlistsKeyWords } from "../utils/constant";
 
 const Home = () => {
   const [{ user, isMobile, homeData, likedTrack}] = useStateProvider();

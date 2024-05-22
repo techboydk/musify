@@ -1,15 +1,36 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { getSearchDataFromApi } from "../utils/api";
 import { useStateProvider } from "../utils/StateProvider";
 
+
+const convertTimeToMinutes = (time) => {
+  const parts = time.split(':').map(Number);
+  
+  let hours = 0, minutes = 0, seconds = 0;
+  
+  if (parts.length === 2) {
+      // Format is MM:SS
+      [minutes, seconds] = parts;
+  } else if (parts.length === 3) {
+      // Format is HH:MM:SS
+      [hours, minutes, seconds] = parts;
+  } else {
+      return 0;
+  }
+  
+  // Calculate total minutes
+  const totalMinutes = (hours * 60) + minutes + Math.floor(seconds / 60);
+  
+  return totalMinutes;
+}
+
 const Searchbar = ({ Ref, Icon, back, search }) => {
-  const [{isMobile}, dispatch] = useStateProvider();
+  const [dispatch] = useStateProvider();
   const [inputValue, setInputValue] = useState();
   const navigate = useNavigate();
   const inputRef = useRef();
-  const location = useLocation();
 
   const clickHandler = (e) => {
     if (window.location.hash.split("/")[1] !== "searchpage") {
@@ -37,7 +58,11 @@ const Searchbar = ({ Ref, Icon, back, search }) => {
       getSearchDataFromApi(inputValue).then((data) => {
         const allTrack = []
         data.map((track)=>{
-          track?.duration !== 0 && isMobile ? track?.duration/1000 <= 600 && allTrack.push(track) : allTrack.push(track);
+          const duration = convertTimeToMinutes(track.lengthText);
+          if(duration<10 && duration >0){
+            allTrack.push(track);
+          }
+          return 0;
         })
         dispatch({
           type: "SET_SEARCH_RESULTS",

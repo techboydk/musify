@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { useStateProvider } from "./utils/StateProvider";
 import Layout from "./Layout";
@@ -8,7 +8,6 @@ import SearchPage from "./components/SearchPage";
 import Player2 from "./shared/player2";
 import { createHomeData } from "./utils/api";
 import { playlistsKeyWords } from "./utils/constant";
-import axios from "axios";
 
 
 const App = () => {
@@ -59,7 +58,7 @@ const App = () => {
         );
       }
     };
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     // Call the createHomeData function
@@ -67,19 +66,19 @@ const App = () => {
       createHomeData(playlistsKeyWords)
         .then((HomeData) => {
           // Handle the HomeData here
-          console.log(HomeData);
           dispatch({
             type: "SET_HOMEDATA",
             homeData: HomeData,
           });
           localStorage.setItem("homeData", JSON.stringify(HomeData));
+          
           // You can perform further operations with HomeData as needed
         })
         .catch((error) => {
           // Handle any errors that occur during the process
           console.error(error);
         });
-  }, []);
+  }, [homeData, dispatch]);
   useEffect(() => {
     const _user = window.localStorage.getItem("username");
 

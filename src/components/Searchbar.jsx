@@ -27,7 +27,7 @@ const convertTimeToMinutes = (time) => {
 }
 
 const Searchbar = ({ Ref, Icon, back, search }) => {
-  const [dispatch] = useStateProvider();
+  const [{},dispatch] = useStateProvider();
   const [inputValue, setInputValue] = useState();
   const navigate = useNavigate();
   const inputRef = useRef();

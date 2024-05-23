@@ -4,7 +4,7 @@ import { useStateProvider } from './utils/StateProvider';
 
 const Login = () => {
   const [inputValue, setInputValue] = useState('');
-  const [dispatch] = useStateProvider();
+  const [{},dispatch] = useStateProvider();
 
 
   const handleChange = (event) => {
@@ -73,6 +73,8 @@ const Container = styled.div`
     margin-top: 1rem;
     font-weight: 600;
     font-size: .85rem;
+    user-select: none;
+    cursor: pointer;
     cursor: pointer;
     }
   }

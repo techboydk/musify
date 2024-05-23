@@ -107,7 +107,6 @@ const Player2 = () => {
 
   
     const duration = totalDuration(selectedTrack?.lengthText)
-    console.log(player?.current)
 
 
     if (duration-1 === currentTime) {

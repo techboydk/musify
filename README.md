@@ -1,4 +1,4 @@
-# Musify
+# Musify [🔗 Live](https://techboydk.github.io/musify/)
 
 Musify is a React-based music web application that leverages the YouTube API to provide users with an engaging music streaming experience. The application features responsive design, online/offline status detection, and playlist management.
 
